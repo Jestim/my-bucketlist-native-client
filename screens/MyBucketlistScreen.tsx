@@ -1,13 +1,11 @@
-import { View, Text } from "react-native";
+import { View, Text } from 'react-native';
 
-function MyBucketlistScreen () {
-	return (
-		<View>
-			<Text>
-				Here is my list
-			</Text>
-		</View>
-	)
+function MyBucketlistScreen() {
+  return (
+    <View>
+      <Text>Here is my list</Text>
+    </View>
+  );
 }
 
-export default MyBucketlistScreen
+export default MyBucketlistScreen;
