@@ -28,9 +28,11 @@
     "quotes": ["error", "single"],
     "no-duplicate-imports": "error",
     "react/jsx-filename-extension": [2, { "extensions": [".tsx"] }],
-    "no-use-before-define": "off",
     "prettier/prettier": "error",
     "react/style-prop-object": "off",
+    "no-use-before-define": "off",
+    "react/no-unstable-nested-components": "off",
+    "@typescript-eslint/no-use-before-define": "off",
     "import/extensions": [
       "error",
       "ignorePackages",

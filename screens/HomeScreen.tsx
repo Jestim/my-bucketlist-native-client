@@ -1,15 +1,9 @@
-import { View, Text, Button } from 'react-native';
+import { View, Text } from 'react-native';
 
-import { HomeScreenProps } from '../types';
-
-function HomeScreen({ navigation }: HomeScreenProps) {
+function HomeScreen() {
   return (
     <View>
       <Text>This is the home screen</Text>
-      <Button
-        title="My List"
-        onPress={() => navigation.navigate('MyBucketlist')}
-      />
     </View>
   );
 }
