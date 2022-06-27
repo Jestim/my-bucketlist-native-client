@@ -1,10 +1,17 @@
-import { View, Text } from 'react-native';
+import { View, Text, Button } from 'react-native';
+import MainComponent from '../components/MainComponent';
+import HeaderComponent from '../components/HeaderComponent';
 
 function HomeScreen() {
   return (
-    <View>
-      <Text>This is the home screen</Text>
-    </View>
+    <>
+      <HeaderComponent title="Home" />
+      <MainComponent>
+        <Text>This is the home screen</Text>
+        <Text>another text</Text>
+        <Button title="Click me" />
+      </MainComponent>
+    </>
   );
 }
 

@@ -18,43 +18,40 @@ const Tab = createBottomTabNavigator<RootStackParamList>();
 
 export default function BottomTabNavigator() {
   return (
-    <Tab.Navigator initialRouteName="Home">
+    <Tab.Navigator
+      initialRouteName="Home"
+      screenOptions={{
+        tabBarShowLabel: false,
+        headerShown: false
+      }}
+      backBehavior='history'
+    >
       <Tab.Screen
         name="Home"
         component={HomeScreen}
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="home" size={24} color="black" />
-          )
+          tabBarIcon: () => <FontAwesome name="home" size={24} color="black" />
         }}
       />
       <Tab.Screen
         name="MyBucketlist"
         component={MyBucketlistScreen}
         options={{
-          title: 'My Bucketlist',
-          tabBarIcon: ({ color, size }) => (
-            <Entypo name="bucket" size={24} color="black" />
-          )
+          tabBarIcon: () => <Entypo name="bucket" size={24} color="black" />
         }}
       />
       <Tab.Screen
         name="Friends"
         component={FriendsScreen}
         options={{
-          title: 'Friend',
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="heart" size={24} color="black" />
-          )
+          tabBarIcon: () => <FontAwesome name="heart" size={24} color="black" />
         }}
       />
       <Tab.Screen
         name="Search"
         component={SearchScreen}
         options={{
-          title: 'Search',
-          tabBarIcon: ({ color, size }) => (
+          tabBarIcon: () => (
             <FontAwesome5 name="search" size={24} color="black" />
           )
         }}
@@ -63,8 +60,7 @@ export default function BottomTabNavigator() {
         name="Profile"
         component={ProfileScreen}
         options={{
-          title: 'Profile',
-          tabBarIcon: ({ color, size }) => (
+          tabBarIcon: () => (
             <MaterialCommunityIcons name="human" size={24} color="black" />
           )
         }}

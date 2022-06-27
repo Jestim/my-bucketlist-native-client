@@ -1,21 +1,17 @@
-import { StyleSheet, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import { StatusBar } from 'expo-status-bar';
+import { useState } from 'react';
 
 import BottomTabNavigator from './navigation/BottomTabNavigator';
+import LogInScreen from './screens/LogInScreen';
 
 export default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   return (
     <NavigationContainer>
-      <BottomTabNavigator />
+      <StatusBar style="auto" />
+      {isLoggedIn ? <BottomTabNavigator /> : <LogInScreen />}
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#266a31',
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
-});

@@ -1,10 +1,15 @@
-import { View, Text } from 'react-native';
+import { Text } from 'react-native';
+import HeaderComponent from '../components/HeaderComponent';
+import MainComponent from '../components/MainComponent';
 
 function SearchScreen() {
   return (
-    <View>
-      <Text>This is the search screen</Text>
-    </View>
+    <>
+      <HeaderComponent title="Search" />
+      <MainComponent>
+        <Text>This is the search screen</Text>
+      </MainComponent>
+    </>
   );
 }
 

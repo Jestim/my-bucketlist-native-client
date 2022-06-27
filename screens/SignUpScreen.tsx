@@ -1,16 +1,16 @@
-import { Text } from 'react-native';
+import { View, Text } from 'react-native';
 import MainComponent from '../components/MainComponent';
 import HeaderComponent from '../components/HeaderComponent';
 
-function FriendsScreen() {
+function SignUpScreen() {
   return (
     <>
-      <HeaderComponent title="Friends" />
+      <HeaderComponent title="Sign Up" />
       <MainComponent>
-        <Text>This is the freinds screen</Text>
+        <Text>This is the sign up screen</Text>
       </MainComponent>
     </>
   );
 }
 
-export default FriendsScreen;
+export default SignUpScreen;
