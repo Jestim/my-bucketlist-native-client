@@ -1,6 +1,7 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import HeaderComponent from '../components/HeaderComponent';
 import MainComponent from '../components/MainComponent';
+import StandardTextComponent from '../components/StandardTextComponent';
 
 function LogInScreen() {
   return (
@@ -8,7 +9,7 @@ function LogInScreen() {
       <HeaderComponent title="Log In" />
       <MainComponent>
         <View>
-          <Text>This is the login screen</Text>
+          <StandardTextComponent text="This is the login screen" />
         </View>
       </MainComponent>
     </>

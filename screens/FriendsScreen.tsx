@@ -1,13 +1,13 @@
-import { Text } from 'react-native';
 import MainComponent from '../components/MainComponent';
 import HeaderComponent from '../components/HeaderComponent';
+import StandardTextComponent from '../components/StandardTextComponent';
 
 function FriendsScreen() {
   return (
     <>
       <HeaderComponent title="Friends" />
       <MainComponent>
-        <Text>This is the freinds screen</Text>
+        <StandardTextComponent text="This is the freinds screen" />
       </MainComponent>
     </>
   );

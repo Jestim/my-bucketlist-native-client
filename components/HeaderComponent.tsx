@@ -1,4 +1,3 @@
-import { ReactChild, ReactFragment, ReactPortal } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import colors from '../styles/colors';
 import fontSizes from '../styles/fonts';
@@ -16,11 +15,13 @@ function HeaderComponent(props: { title: string }) {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: statusBarHeight,
+    paddingTop: statusBarHeight,
     padding: 12,
     width: screenWidth,
     backgroundColor: colors.secondary,
-    alignItems: 'center'
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: colors.light
   },
   headerText: {
     color: colors.light,

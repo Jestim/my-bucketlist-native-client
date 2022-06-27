@@ -6,11 +6,11 @@ import BottomTabNavigator from './navigation/BottomTabNavigator';
 import LogInScreen from './screens/LogInScreen';
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   return (
     <NavigationContainer>
-      <StatusBar style="auto" />
+      <StatusBar style="light" />
       {isLoggedIn ? <BottomTabNavigator /> : <LogInScreen />}
     </NavigationContainer>
   );

@@ -13,6 +13,7 @@ import { RootStackParamList } from '../types';
 import FriendsScreen from '../screens/FriendsScreen';
 import SearchScreen from '../screens/SearchScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import colors from '../styles/colors';
 
 const Tab = createBottomTabNavigator<RootStackParamList>();
 
@@ -22,29 +23,37 @@ export default function BottomTabNavigator() {
       initialRouteName="Home"
       screenOptions={{
         tabBarShowLabel: false,
-        headerShown: false
+        headerShown: false,
+        tabBarActiveBackgroundColor: colors.primary,
+        tabBarInactiveBackgroundColor: colors.secondary
       }}
-      backBehavior='history'
+      backBehavior="history"
     >
       <Tab.Screen
         name="Home"
         component={HomeScreen}
         options={{
-          tabBarIcon: () => <FontAwesome name="home" size={24} color="black" />
+          tabBarIcon: () => (
+            <FontAwesome name="home" size={24} color={colors.light} />
+          )
         }}
       />
       <Tab.Screen
         name="MyBucketlist"
         component={MyBucketlistScreen}
         options={{
-          tabBarIcon: () => <Entypo name="bucket" size={24} color="black" />
+          tabBarIcon: () => (
+            <Entypo name="bucket" size={24} color={colors.light} />
+          )
         }}
       />
       <Tab.Screen
         name="Friends"
         component={FriendsScreen}
         options={{
-          tabBarIcon: () => <FontAwesome name="heart" size={24} color="black" />
+          tabBarIcon: () => (
+            <FontAwesome name="heart" size={24} color={colors.light} />
+          )
         }}
       />
       <Tab.Screen
@@ -52,7 +61,7 @@ export default function BottomTabNavigator() {
         component={SearchScreen}
         options={{
           tabBarIcon: () => (
-            <FontAwesome5 name="search" size={24} color="black" />
+            <FontAwesome5 name="search" size={24} color={colors.light} />
           )
         }}
       />
@@ -61,7 +70,11 @@ export default function BottomTabNavigator() {
         component={ProfileScreen}
         options={{
           tabBarIcon: () => (
-            <MaterialCommunityIcons name="human" size={24} color="black" />
+            <MaterialCommunityIcons
+              name="human"
+              size={24}
+              color={colors.light}
+            />
           )
         }}
       />

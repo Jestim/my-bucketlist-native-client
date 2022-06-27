@@ -1,13 +1,13 @@
-import { View, Text } from 'react-native';
 import HeaderComponent from '../components/HeaderComponent';
 import MainComponent from '../components/MainComponent';
+import StandardTextComponent from '../components/StandardTextComponent';
 
 function MyBucketlistScreen() {
   return (
     <>
       <HeaderComponent title="My Bucketlist" />
       <MainComponent>
-        <Text>Here is my list</Text>
+        <StandardTextComponent text="Here is my list" />
       </MainComponent>
     </>
   );
