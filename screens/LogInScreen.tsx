@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import {
   Pressable,
   KeyboardAvoidingView,
@@ -18,9 +18,6 @@ function LogInScreen({ navigation }: LoginScreenProps) {
   const [password, setPassword] = useState('');
 
   const handleLogIn = () => {
-    console.log(`Username: ${username}`);
-    console.log(`Password: ${password}`);
-
     setUsername('');
     setPassword('');
   };
@@ -54,19 +51,19 @@ function LogInScreen({ navigation }: LoginScreenProps) {
               style={({ pressed }) =>
                 pressed ? [styles.button, styles.buttonPresed] : styles.button
               }
-              onPress={handleLogIn}
-            >
-              <Text style={styles.buttonText}>Log In</Text>
-            </Pressable>
-            <Pressable
-              style={({ pressed }) =>
-                pressed ? [styles.button, styles.buttonPresed] : styles.button
-              }
               onPress={() => {
                 navigation.navigate('SignUp');
               }}
             >
               <Text style={styles.buttonText}>Sign Up</Text>
+            </Pressable>
+            <Pressable
+              style={({ pressed }) =>
+                pressed ? [styles.button, styles.buttonPresed] : styles.button
+              }
+              onPress={handleLogIn}
+            >
+              <Text style={styles.buttonText}>Log In</Text>
             </Pressable>
           </View>
         </KeyboardAvoidingView>

@@ -22,13 +22,31 @@ function SignUpScreen({ navigation }: SignUpScreenProps) {
   const [lastName, setLastName] = useState('');
   const [age, setAge] = useState('');
 
-  const handleSignUp = () => {
-    console.log(username);
-    console.log(email);
-    console.log(password);
-    console.log(firstName);
-    console.log(lastName);
-    console.log(age);
+  const handleSignUp = async () => {
+    const newUserInfo = {
+      username,
+      email,
+      password,
+      firstName,
+      lastName,
+      age,
+    };
+
+    try {
+      const res = await fetch('http://10.0.2.2:3000/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newUserInfo),
+      });
+
+      const data = await res.json();
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
 
     setUsername('');
     setEmail('');
@@ -69,6 +87,7 @@ function SignUpScreen({ navigation }: SignUpScreenProps) {
             placeholder="Password"
             placeholderTextColor={colors.light}
             value={password}
+            secureTextEntry
             onChangeText={(text) => {
               setPassword(text);
             }}
@@ -105,19 +124,19 @@ function SignUpScreen({ navigation }: SignUpScreenProps) {
               style={({ pressed }) =>
                 pressed ? [styles.button, styles.buttonPresed] : styles.button
               }
-              onPress={handleSignUp}
-            >
-              <Text style={styles.buttonText}>Submit</Text>
-            </Pressable>
-            <Pressable
-              style={({ pressed }) =>
-                pressed ? [styles.button, styles.buttonPresed] : styles.button
-              }
               onPress={() => {
                 navigation.goBack();
               }}
             >
               <Text style={styles.buttonText}>Go Back</Text>
+            </Pressable>
+            <Pressable
+              style={({ pressed }) =>
+                pressed ? [styles.button, styles.buttonPresed] : styles.button
+              }
+              onPress={handleSignUp}
+            >
+              <Text style={styles.buttonText}>Submit</Text>
             </Pressable>
           </View>
         </ScrollView>
@@ -126,13 +145,6 @@ function SignUpScreen({ navigation }: SignUpScreenProps) {
   );
 }
 
-// username,
-// email,
-// password: hashedPassword,
-// firstName,
-// lastName,
-// age
-
 const styles = StyleSheet.create({
   SignUpContainer: {
     flex: 1,
@@ -140,9 +152,10 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flexGrow: 1,
-    minHeight: '100%',
+    paddingVertical: 24,
     justifyContent: 'center',
     alignItems: 'center',
+    minHeight: '100%',
   },
   buttonContainer: {
     marginTop: 12,
