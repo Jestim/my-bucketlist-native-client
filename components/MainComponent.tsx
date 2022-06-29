@@ -14,8 +14,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: colors.light
-  }
+    borderBottomColor: colors.light,
+  },
 });
 
 export default MainComponent;

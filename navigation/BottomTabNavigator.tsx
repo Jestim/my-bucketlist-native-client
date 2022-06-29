@@ -3,19 +3,19 @@ import {
   FontAwesome,
   Entypo,
   FontAwesome5,
-  MaterialCommunityIcons
+  MaterialCommunityIcons,
 } from '@expo/vector-icons';
 
 import HomeScreen from '../screens/HomeScreen';
 import MyBucketlistScreen from '../screens/MyBucketlistScreen';
 
-import { RootStackParamList } from '../types';
+import { BottomStackParamList } from '../types';
 import FriendsScreen from '../screens/FriendsScreen';
 import SearchScreen from '../screens/SearchScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import colors from '../styles/colors';
 
-const Tab = createBottomTabNavigator<RootStackParamList>();
+const Tab = createBottomTabNavigator<BottomStackParamList>();
 
 export default function BottomTabNavigator() {
   return (
@@ -25,7 +25,7 @@ export default function BottomTabNavigator() {
         tabBarShowLabel: false,
         headerShown: false,
         tabBarActiveBackgroundColor: colors.primary,
-        tabBarInactiveBackgroundColor: colors.secondary
+        tabBarInactiveBackgroundColor: colors.secondary,
       }}
       backBehavior="history"
     >
@@ -35,7 +35,7 @@ export default function BottomTabNavigator() {
         options={{
           tabBarIcon: () => (
             <FontAwesome name="home" size={24} color={colors.light} />
-          )
+          ),
         }}
       />
       <Tab.Screen
@@ -44,7 +44,7 @@ export default function BottomTabNavigator() {
         options={{
           tabBarIcon: () => (
             <Entypo name="bucket" size={24} color={colors.light} />
-          )
+          ),
         }}
       />
       <Tab.Screen
@@ -53,7 +53,7 @@ export default function BottomTabNavigator() {
         options={{
           tabBarIcon: () => (
             <FontAwesome name="heart" size={24} color={colors.light} />
-          )
+          ),
         }}
       />
       <Tab.Screen
@@ -62,7 +62,7 @@ export default function BottomTabNavigator() {
         options={{
           tabBarIcon: () => (
             <FontAwesome5 name="search" size={24} color={colors.light} />
-          )
+          ),
         }}
       />
       <Tab.Screen
@@ -75,7 +75,7 @@ export default function BottomTabNavigator() {
               size={24}
               color={colors.light}
             />
-          )
+          ),
         }}
       />
     </Tab.Navigator>

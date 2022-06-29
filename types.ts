@@ -1,8 +1,6 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-export type RootStackParamList = {
-  LogIn: undefined;
-  SignUp: undefined;
+export type BottomStackParamList = {
   Home: undefined;
   MyBucketlist: undefined;
   Friends: undefined;
@@ -10,11 +8,25 @@ export type RootStackParamList = {
   Profile: undefined;
 };
 
-export type HomeScreenNavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  'Home'
+export type AuthStackParamList = {
+  LogIn: undefined;
+  SignUp: undefined;
+};
+
+export type LoginScreenNavigationProp = NativeStackNavigationProp<
+  AuthStackParamList,
+  'SignUp'
 >;
 
-export type HomeScreenProps = {
-  navigation: HomeScreenNavigationProp;
+export type LoginScreenProps = {
+  navigation: LoginScreenNavigationProp;
+};
+
+export type SignUpScreenNavigationProp = NativeStackNavigationProp<
+  AuthStackParamList,
+  'LogIn'
+>;
+
+export type SignUpScreenProps = {
+  navigation: LoginScreenNavigationProp;
 };

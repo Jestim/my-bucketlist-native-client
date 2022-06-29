@@ -15,7 +15,6 @@ function HeaderComponent(props: { title: string }) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: statusBarHeight,
     padding: 12,
     width: screenWidth,
     backgroundColor: colors.secondary,
