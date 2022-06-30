@@ -22,3 +22,13 @@ export async function getJWT(key: string): Promise<string | null> {
   }
   return null;
 }
+
+export async function deleteJWT(key: string): Promise<boolean> {
+  try {
+    await SecureStore.deleteItemAsync(key);
+    return true;
+  } catch (error) {
+    console.log(error);
+  }
+  return false;
+}

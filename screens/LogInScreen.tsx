@@ -7,6 +7,7 @@ import {
   View,
   Text,
 } from 'react-native';
+import jwtDecode from 'jwt-decode';
 import HeaderComponent from '../components/HeaderComponent';
 import MainComponent from '../components/MainComponent';
 import colors from '../styles/colors';
@@ -14,8 +15,8 @@ import fontSizes from '../styles/fonts';
 import { LoginScreenProps } from '../types/NavigationTypes';
 import host from '../helpers/host';
 import UserDetailsContext from '../context/UserContext';
-import { UserDetailsContextType } from '../types/ContextTypes';
-import { getJWT, saveJWT } from '../helpers/secureStore';
+import { UserDetailsContextType, User } from '../types/ContextTypes';
+import { saveJWT } from '../helpers/secureStore';
 import jwtSecureStoreKey from '../helpers/variables';
 
 function LogInScreen({ navigation }: LoginScreenProps) {
@@ -50,13 +51,19 @@ function LogInScreen({ navigation }: LoginScreenProps) {
 
         await saveJWT(jwtSecureStoreKey, jwtTokenFromServer.token);
 
-        const jwtFromSecureStore = await getJWT(jwtSecureStoreKey);
+        // Extract userID from JWT
+        const jwtData: { exp: string; iat: string; sub: string } = jwtDecode(
+          jwtTokenFromServer.token,
+        );
 
-        setUserState({
-          ...userState,
+        // Set userState with userID, JWT and isLoggedIn
+        const newUserState: User = {
+          userId: jwtData.sub,
           jwtToken: jwtTokenFromServer.token,
           isLoggedIn: true,
-        });
+        };
+
+        setUserState(newUserState);
       }
     } catch (error) {
       console.log(error);
