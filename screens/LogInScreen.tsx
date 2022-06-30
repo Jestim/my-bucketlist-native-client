@@ -15,6 +15,8 @@ import { LoginScreenProps } from '../types/NavigationTypes';
 import host from '../helpers/host';
 import UserDetailsContext from '../context/UserContext';
 import { UserDetailsContextType } from '../types/ContextTypes';
+import { getJWT, saveJWT } from '../helpers/secureStore';
+import jwtSecureStoreKey from '../helpers/variables';
 
 function LogInScreen({ navigation }: LoginScreenProps) {
   const [username, setUsername] = useState<string>('');
@@ -30,6 +32,9 @@ function LogInScreen({ navigation }: LoginScreenProps) {
       password,
     };
 
+    setUsername('');
+    setPassword('');
+
     try {
       const response = await fetch(`${host}/api/auth/login`, {
         method: 'POST',
@@ -40,18 +45,22 @@ function LogInScreen({ navigation }: LoginScreenProps) {
         body: JSON.stringify(loginInfo),
       });
 
-      const data = await response.json();
+      if (response.ok) {
+        const jwtTokenFromServer: { token: string } = await response.json();
 
-      console.log(data);
+        await saveJWT(jwtSecureStoreKey, jwtTokenFromServer.token);
 
-      // setUserState({ ...userState, jwtToken: data });
-      console.log();
+        const jwtFromSecureStore = await getJWT(jwtSecureStoreKey);
+
+        setUserState({
+          ...userState,
+          jwtToken: jwtTokenFromServer.token,
+          isLoggedIn: true,
+        });
+      }
     } catch (error) {
       console.log(error);
     }
-
-    setUsername('');
-    setPassword('');
   };
 
   return (

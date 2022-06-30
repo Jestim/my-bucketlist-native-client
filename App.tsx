@@ -26,16 +26,9 @@ function App() {
   );
 
   useEffect(() => {
-    const testJWT = jwtDecode(
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MmJkNmUwZDM5YjZiMzdiZjJhNmJjM2YiLCJpYXQiOjE2NTY1ODE2NTczNDAsImV4cCI6MTY1NzE4NjQ1NzM0MH0.UK7WPaTq3hfY6pG_gEd9aSE-DyUToDJ6f-gMVNtk_i8',
-    );
-    console.log(testJWT);
-
-    console.log('useEffect Called');
+    setIsLoading(true);
     // Check if JWT is stored on device
     const getJWTFromSecureStore = async () => {
-      console.log('getJWTFromSecureStore called');
-
       const jwtTokenFromSecureStore = await getJWT(jwtSecureStoreKey);
 
       // If JWT exists then check if it is still valid
@@ -50,12 +43,7 @@ function App() {
           },
         });
 
-        console.log(response.status);
-
         if (response.ok) {
-          const data = await response.json();
-          console.log(data);
-
           // Extract userID from JWT
           const jwtData: { exp: string; iat: string; sub: string } = jwtDecode(
             jwtTokenFromSecureStore,
@@ -67,8 +55,11 @@ function App() {
             jwtToken: jwtTokenFromSecureStore,
             isLoggedIn: true,
           };
+
+          setUserState(newUserState);
         }
       }
+      setIsLoading(false);
     };
 
     getJWTFromSecureStore().catch((err) => console.log(err));
