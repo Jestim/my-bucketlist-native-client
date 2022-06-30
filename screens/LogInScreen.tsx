@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import {
   Pressable,
   KeyboardAvoidingView,
@@ -11,13 +11,45 @@ import HeaderComponent from '../components/HeaderComponent';
 import MainComponent from '../components/MainComponent';
 import colors from '../styles/colors';
 import fontSizes from '../styles/fonts';
-import { LoginScreenProps } from '../types';
+import { LoginScreenProps } from '../types/NavigationTypes';
+import host from '../helpers/host';
+import UserDetailsContext from '../context/UserContext';
+import { UserDetailsContextType } from '../types/ContextTypes';
 
 function LogInScreen({ navigation }: LoginScreenProps) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
-  const handleLogIn = () => {
+  const { userState, setUserState } = useContext(
+    UserDetailsContext,
+  ) as UserDetailsContextType;
+
+  const handleLogIn = async () => {
+    const loginInfo = {
+      username,
+      password,
+    };
+
+    try {
+      const response = await fetch(`${host}/api/auth/login`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(loginInfo),
+      });
+
+      const data = await response.json();
+
+      console.log(data);
+
+      // setUserState({ ...userState, jwtToken: data });
+      console.log();
+    } catch (error) {
+      console.log(error);
+    }
+
     setUsername('');
     setPassword('');
   };

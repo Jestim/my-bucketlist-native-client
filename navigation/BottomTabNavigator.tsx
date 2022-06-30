@@ -9,7 +9,7 @@ import {
 import HomeScreen from '../screens/HomeScreen';
 import MyBucketlistScreen from '../screens/MyBucketlistScreen';
 
-import { BottomStackParamList } from '../types';
+import { BottomStackParamList } from '../types/NavigationTypes';
 import FriendsScreen from '../screens/FriendsScreen';
 import SearchScreen from '../screens/SearchScreen';
 import ProfileScreen from '../screens/ProfileScreen';

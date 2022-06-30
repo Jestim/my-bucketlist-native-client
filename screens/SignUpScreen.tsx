@@ -10,17 +10,18 @@ import {
 import { useState } from 'react';
 import MainComponent from '../components/MainComponent';
 import HeaderComponent from '../components/HeaderComponent';
-import { SignUpScreenProps } from '../types';
+import { SignUpScreenProps } from '../types/NavigationTypes';
 import colors from '../styles/colors';
 import fontSizes from '../styles/fonts';
+import host from '../helpers/host';
 
 function SignUpScreen({ navigation }: SignUpScreenProps) {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [age, setAge] = useState('');
+  const [username, setUsername] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
+  const [age, setAge] = useState<string>('');
 
   const handleSignUp = async () => {
     const newUserInfo = {
@@ -33,7 +34,7 @@ function SignUpScreen({ navigation }: SignUpScreenProps) {
     };
 
     try {
-      const res = await fetch('http://10.0.2.2:3000/api/auth/signup', {
+      const res = await fetch(`${host}/api/auth/signup`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
