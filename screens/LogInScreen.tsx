@@ -33,9 +33,6 @@ function LogInScreen({ navigation }: LoginScreenProps) {
       password,
     };
 
-    setUsername('');
-    setPassword('');
-
     try {
       const response = await fetch(`${host}/api/auth/login`, {
         method: 'POST',
@@ -63,6 +60,8 @@ function LogInScreen({ navigation }: LoginScreenProps) {
           isLoggedIn: true,
         };
 
+        setUsername('');
+        setPassword('');
         setUserState(newUserState);
       }
     } catch (error) {

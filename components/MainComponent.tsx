@@ -1,10 +1,9 @@
-import { ReactChild } from 'react';
+import { ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 import colors from '../styles/colors';
 
-function MainComponent(props: { children: ReactChild }) {
-  // eslint-disable-next-line react/destructuring-assignment
-  return <View style={styles.container}>{props.children}</View>;
+function MainComponent({ children }: { children: ReactNode }) {
+  return <View style={styles.container}>{children}</View>;
 }
 
 const styles = StyleSheet.create({

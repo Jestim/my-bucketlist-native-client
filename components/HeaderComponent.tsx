@@ -7,13 +7,11 @@ import { screenWidth } from '../styles/shared';
 import logout from '../helpers/logOut';
 import UserDetailsContext from '../context/UserContext';
 import { UserDetailsContextType } from '../types/ContextTypes';
-import { getJWT } from '../helpers/secureStore';
-import jwtSecureStoreKey from '../helpers/variables';
 
 function HeaderComponent(props: { title: string }) {
   const { title } = props;
 
-  const { userState, setUserState } = useContext(
+  const { setUserState } = useContext(
     UserDetailsContext,
   ) as UserDetailsContextType;
 

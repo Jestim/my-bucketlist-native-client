@@ -14,6 +14,7 @@ import FriendsScreen from '../screens/FriendsScreen';
 import SearchScreen from '../screens/SearchScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import colors from '../styles/colors';
+import GoalStackNavigator from './GoalsStackNavigator';
 
 const Tab = createBottomTabNavigator<BottomStackParamList>();
 
@@ -39,8 +40,8 @@ export default function BottomTabNavigator() {
         }}
       />
       <Tab.Screen
-        name="MyBucketlist"
-        component={MyBucketlistScreen}
+        name="Goals"
+        component={GoalStackNavigator}
         options={{
           tabBarIcon: () => (
             <Entypo name="bucket" size={24} color={colors.light} />

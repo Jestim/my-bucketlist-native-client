@@ -55,6 +55,7 @@ function SignUpScreen({ navigation }: SignUpScreenProps) {
     setFirstName('');
     setLastName('');
     setAge('');
+    navigation.goBack();
   };
 
   return (
@@ -64,6 +65,7 @@ function SignUpScreen({ navigation }: SignUpScreenProps) {
         <ScrollView
           style={styles.SignUpContainer}
           contentContainerStyle={styles.scrollView}
+          keyboardShouldPersistTaps="always"
         >
           <TextInput
             style={styles.textInput}
