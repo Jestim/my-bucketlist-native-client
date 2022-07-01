@@ -1,13 +1,15 @@
 import {
   Pressable,
-  KeyboardAvoidingView,
   TextInput,
   StyleSheet,
   View,
   Text,
   ScrollView,
+  Modal,
+  Button,
 } from 'react-native';
 import { useState } from 'react';
+import RNGestureHandlerButton from 'react-native-gesture-handler/lib/typescript/components/GestureHandlerButton';
 import MainComponent from '../components/MainComponent';
 import HeaderComponent from '../components/HeaderComponent';
 import { SignUpScreenProps } from '../types/NavigationTypes';
@@ -22,6 +24,8 @@ function SignUpScreen({ navigation }: SignUpScreenProps) {
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
   const [age, setAge] = useState<string>('');
+  const [success, setSuccess] = useState<boolean>(false);
+  const [errors, setErrors] = useState<[]>([]);
 
   const handleSignUp = async () => {
     const newUserInfo = {
@@ -34,7 +38,7 @@ function SignUpScreen({ navigation }: SignUpScreenProps) {
     };
 
     try {
-      const res = await fetch(`${host}/api/auth/signup`, {
+      const response = await fetch(`${host}/api/auth/signup`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -43,25 +47,42 @@ function SignUpScreen({ navigation }: SignUpScreenProps) {
         body: JSON.stringify(newUserInfo),
       });
 
-      const data = await res.json();
+      const data = await response.json();
       console.log(data);
+
+      if (response.ok) {
+        setSuccess(true);
+      }
     } catch (error) {
       console.log(error);
     }
-
-    setUsername('');
-    setEmail('');
-    setPassword('');
-    setFirstName('');
-    setLastName('');
-    setAge('');
-    navigation.goBack();
   };
 
   return (
     <>
       <HeaderComponent title="Sign Up" />
       <MainComponent>
+        <Modal transparent visible={success}>
+          <View style={styles.modalConatiner}>
+            <View style={styles.successAlertContainer}>
+              <Text style={styles.modalText}>User created successfully!</Text>
+              <Pressable
+                onPress={() => {
+                  setUsername('');
+                  setEmail('');
+                  setPassword('');
+                  setFirstName('');
+                  setLastName('');
+                  setAge('');
+                  setSuccess(false);
+                  navigation.goBack();
+                }}
+              >
+                <Text>OK</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
         <ScrollView
           style={styles.SignUpContainer}
           contentContainerStyle={styles.scrollView}
@@ -195,6 +216,29 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderColor: colors.light,
     color: colors.light,
+  },
+  modalConatiner: {
+    flex: 1,
+    height: '100%',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+  },
+  successAlertContainer: {
+    width: '70%',
+    height: '25%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.secondary,
+    borderWidth: 1,
+    borderColor: colors.light,
+    borderRadius: 48,
+  },
+  modalText: {
+    color: colors.light,
+    fontSize: fontSizes.large,
+    backgroundColor: colors.secondary,
   },
 });
 

@@ -28,6 +28,8 @@ function LogInScreen({ navigation }: LoginScreenProps) {
   ) as UserDetailsContextType;
 
   const handleLogIn = async () => {
+    console.log('handleLogIn called');
+
     const loginInfo = {
       username,
       password,
@@ -63,6 +65,8 @@ function LogInScreen({ navigation }: LoginScreenProps) {
         setUsername('');
         setPassword('');
         setUserState(newUserState);
+      } else {
+        console.log(response.status);
       }
     } catch (error) {
       console.log(error);

@@ -16,7 +16,7 @@ import host from './helpers/host';
 
 function App() {
   const [userState, setUserState] = useState<User>(initialUserState);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const userDetails = useMemo(
     () => ({
