@@ -1,9 +1,10 @@
 import 'react-native-gesture-handler';
+import 'react-native-get-random-values';
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useMemo, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ActivityIndicator, StyleSheet } from 'react-native';
+import { ActivityIndicator, Alert, StyleSheet } from 'react-native';
 import jwtDecode from 'jwt-decode';
 import AuthStackNavigator from './navigation/AuthStackNavigator';
 import BottomTabNavigator from './navigation/BottomTabNavigator';
@@ -31,40 +32,50 @@ function App() {
     // Check if JWT is stored on device
     const getJWTFromSecureStore = async () => {
       const jwtTokenFromSecureStore = await getJWT(jwtSecureStoreKey);
+      console.log(jwtTokenFromSecureStore);
 
       // If JWT exists then check if it is still valid
       if (jwtTokenFromSecureStore) {
-        // If JWT is valid
-        const response = await fetch(`${host}/api/auth/isLoggedIn`, {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            Authorization: `Bearer ${jwtTokenFromSecureStore}`,
-            'Content-Type': 'application/json',
-          },
-        });
+        // Extract JWT payload
+        const jwtPayload: { exp: string; iat: string; sub: string } = jwtDecode(
+          jwtTokenFromSecureStore,
+        );
 
-        if (response.ok) {
-          // Extract userID from JWT
-          const jwtData: { exp: string; iat: string; sub: string } = jwtDecode(
-            jwtTokenFromSecureStore,
-          );
+        // If JWT has not expired
+        if (jwtPayload.exp > Date.now().toString()) {
+          const response = await fetch(`${host}/api/auth/isLoggedIn`, {
+            method: 'GET',
+            headers: {
+              Accept: 'application/json',
+              Authorization: `Bearer ${jwtTokenFromSecureStore}`,
+              'Content-Type': 'application/json',
+            },
+          });
 
-          // Set userState with userID, JWT and isLoggedIn
-          const newUserState: User = {
-            userId: jwtData.sub,
-            jwtToken: jwtTokenFromSecureStore,
-            isLoggedIn: true,
-          };
+          console.log(response.status);
 
-          setUserState(newUserState);
+          if (response.ok) {
+            // Set userState with userID, JWT and isLoggedIn
+            const newUserState: User = {
+              userId: jwtPayload.sub,
+              jwtToken: jwtTokenFromSecureStore,
+              jwtExp: jwtPayload.exp,
+              isLoggedIn: true,
+            };
+
+            setUserState(newUserState);
+          }
         }
       }
+
       setIsLoading(false);
     };
 
-    getJWTFromSecureStore().catch((err) => console.log(err));
     // If its not valid return
+    getJWTFromSecureStore().catch((err) => {
+      console.log(err);
+      alert(err.message);
+    });
   }, []);
 
   return (

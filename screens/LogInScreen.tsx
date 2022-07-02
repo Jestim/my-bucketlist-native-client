@@ -68,8 +68,9 @@ function LogInScreen({ navigation }: LoginScreenProps) {
       } else {
         console.log(response.status);
       }
-    } catch (error) {
-      console.log(error);
+    } catch (err: any) {
+      console.log(err);
+      alert(err.message);
     }
   };
 

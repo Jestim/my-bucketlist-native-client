@@ -7,14 +7,15 @@ import MainComponent from '../components/MainComponent';
 import colors from '../styles/colors';
 import { GoalsScreenProps } from '../types/NavigationTypes';
 import host from '../helpers/host';
-import UserDetailsContext from '../context/UserContext';
+import UserDetailsContext, { initialUserState } from '../context/UserContext';
 import { UserDetailsContextType } from '../types/ContextTypes';
 import IGoal from '../types/GoalType';
 import GoalCardComponent from '../components/GoalCardComponent';
 import StandardTextComponent from '../components/StandardTextComponent';
+import logout from '../helpers/logOut';
 
 function MyBucketlistScreen({ navigation }: GoalsScreenProps) {
-  const { userState } = useContext(
+  const { userState, setUserState } = useContext(
     UserDetailsContext,
   ) as UserDetailsContextType;
 
@@ -39,11 +40,26 @@ function MyBucketlistScreen({ navigation }: GoalsScreenProps) {
       if (response.ok) {
         const data = await response.json();
         setUserGoals(data);
+      } else {
+        alert(response.status);
       }
     };
-    fetchGoals().catch((err) => {
-      console.log(err);
-    });
+
+    if (isFocused) {
+      if (
+        userState.jwtExp !== null &&
+        userState.jwtExp < Date.now().toString()
+      ) {
+        logout(setUserState);
+        console.log(userState);
+
+        return;
+      }
+      fetchGoals().catch((err: any) => {
+        console.log(err);
+        alert(err.message);
+      });
+    }
   }, [isFocused]);
 
   return (

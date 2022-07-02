@@ -6,36 +6,48 @@ import {
   Text,
   ScrollView,
   Modal,
-  Button,
 } from 'react-native';
-import { useState } from 'react';
-import RNGestureHandlerButton from 'react-native-gesture-handler/lib/typescript/components/GestureHandlerButton';
+import { useEffect, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import { useIsFocused } from '@react-navigation/native';
 import MainComponent from '../components/MainComponent';
 import HeaderComponent from '../components/HeaderComponent';
 import { SignUpScreenProps } from '../types/NavigationTypes';
 import colors from '../styles/colors';
 import fontSizes from '../styles/fonts';
 import host from '../helpers/host';
+import SignUpInputType from '../types/SignUpInputType';
+import {
+  initialSignUpInput,
+  initialErrorState,
+} from '../helpers/initialValues';
+import validateSignUpInput from '../helpers/signUpInputValidation';
+import ErrorsType from '../types/ErrorsType';
 
 function SignUpScreen({ navigation }: SignUpScreenProps) {
-  const [username, setUsername] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [firstName, setFirstName] = useState<string>('');
-  const [lastName, setLastName] = useState<string>('');
-  const [age, setAge] = useState<string>('');
+  const [signUpInput, setSignUpInput] =
+    useState<SignUpInputType>(initialSignUpInput);
+
   const [success, setSuccess] = useState<boolean>(false);
-  const [errors, setErrors] = useState<[]>([]);
+  const [errors, setErrors] = useState<ErrorsType>(initialErrorState);
+
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    setErrors(initialErrorState);
+  }, [isFocused]);
+
+  useEffect(() => {
+    setErrors({ ...errors, isShown: true });
+  }, [errors.messages]);
 
   const handleSignUp = async () => {
-    const newUserInfo = {
-      username,
-      email,
-      password,
-      firstName,
-      lastName,
-      age,
-    };
+    const validationResult = validateSignUpInput(signUpInput);
+
+    if (validationResult.length > 0) {
+      setErrors({ ...errors, messages: validationResult });
+      return;
+    }
 
     try {
       const response = await fetch(`${host}/api/auth/signup`, {
@@ -44,7 +56,7 @@ function SignUpScreen({ navigation }: SignUpScreenProps) {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(newUserInfo),
+        body: JSON.stringify(signUpInput),
       });
 
       const data = await response.json();
@@ -52,9 +64,12 @@ function SignUpScreen({ navigation }: SignUpScreenProps) {
 
       if (response.ok) {
         setSuccess(true);
+      } else {
+        throw new Error('Something whent wrong');
       }
-    } catch (error) {
-      console.log(error);
+    } catch (err: any) {
+      setErrors({ ...errors, messages: err.messages });
+      console.log(err);
     }
   };
 
@@ -68,12 +83,7 @@ function SignUpScreen({ navigation }: SignUpScreenProps) {
               <Text style={styles.modalText}>User created successfully!</Text>
               <Pressable
                 onPress={() => {
-                  setUsername('');
-                  setEmail('');
-                  setPassword('');
-                  setFirstName('');
-                  setLastName('');
-                  setAge('');
+                  setSignUpInput(initialSignUpInput);
                   setSuccess(false);
                   navigation.goBack();
                 }}
@@ -83,6 +93,13 @@ function SignUpScreen({ navigation }: SignUpScreenProps) {
             </View>
           </View>
         </Modal>
+        {errors.isShown && errors.messages.length > 0 ? (
+          <View>
+            {errors.messages.map((error: string) => (
+              <Text key={uuidv4()}>{error}</Text>
+            ))}
+          </View>
+        ) : null}
         <ScrollView
           style={styles.SignUpContainer}
           contentContainerStyle={styles.scrollView}
@@ -92,55 +109,65 @@ function SignUpScreen({ navigation }: SignUpScreenProps) {
             style={styles.textInput}
             placeholder="Username"
             placeholderTextColor={colors.light}
-            value={username}
+            value={signUpInput.username}
             onChangeText={(text) => {
-              setUsername(text);
+              setSignUpInput({ ...signUpInput, username: text });
             }}
           />
           <TextInput
             style={styles.textInput}
             placeholder="Email"
             placeholderTextColor={colors.light}
-            value={email}
+            value={signUpInput.email}
             onChangeText={(text) => {
-              setEmail(text);
+              setSignUpInput({ ...signUpInput, email: text });
             }}
           />
           <TextInput
             style={styles.textInput}
             placeholder="Password"
             placeholderTextColor={colors.light}
-            value={password}
+            value={signUpInput.password}
             secureTextEntry
             onChangeText={(text) => {
-              setPassword(text);
+              setSignUpInput({ ...signUpInput, password: text });
+            }}
+          />
+          <TextInput
+            style={styles.textInput}
+            placeholder="Confirm Password"
+            placeholderTextColor={colors.light}
+            value={signUpInput.confirmPassword}
+            secureTextEntry
+            onChangeText={(text) => {
+              setSignUpInput({ ...signUpInput, confirmPassword: text });
             }}
           />
           <TextInput
             style={styles.textInput}
             placeholder="First Name"
             placeholderTextColor={colors.light}
-            value={firstName}
+            value={signUpInput.firstName}
             onChangeText={(text) => {
-              setFirstName(text);
+              setSignUpInput({ ...signUpInput, firstName: text });
             }}
           />
           <TextInput
             style={styles.textInput}
             placeholder="Last Name"
             placeholderTextColor={colors.light}
-            value={lastName}
+            value={signUpInput.lastName}
             onChangeText={(text) => {
-              setLastName(text);
+              setSignUpInput({ ...signUpInput, lastName: text });
             }}
           />
           <TextInput
             style={styles.textInput}
             placeholder="Age"
             placeholderTextColor={colors.light}
-            value={age}
+            value={signUpInput.age}
             onChangeText={(text) => {
-              setAge(text);
+              setSignUpInput({ ...signUpInput, age: text });
             }}
           />
           <View style={styles.buttonContainer}>
@@ -223,7 +250,7 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    backgroundColor: colors.opaqueWhite,
   },
   successAlertContainer: {
     width: '70%',

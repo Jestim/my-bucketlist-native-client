@@ -1,6 +1,7 @@
 export type User = {
   userId: string | null;
   jwtToken: string | null;
+  jwtExp: string | null;
   isLoggedIn: boolean;
 };
 

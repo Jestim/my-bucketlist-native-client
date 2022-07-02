@@ -4,6 +4,7 @@ import { User, UserDetailsContextType } from '../types/ContextTypes';
 export const initialUserState: User = {
   userId: null,
   jwtToken: null,
+  jwtExp: null,
   isLoggedIn: false,
 };
 

@@ -42,7 +42,8 @@ export type SignUpScreenProps = {
 export type GoalsScreenNavigationProp = NativeStackNavigationProp<
   GoalsStackParamList,
   'AddGoalScreen',
-  'MyBucketlist'
+  'MyBucketlist',
+  'LogInScreen'
 >;
 
 export type GoalsScreenProps = {

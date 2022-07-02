@@ -15,7 +15,7 @@ import fontSizes from '../styles/fonts';
 import { GoalsScreenProps } from '../types/NavigationTypes';
 import host from '../helpers/host';
 import { UserDetailsContextType } from '../types/ContextTypes';
-import UserDetailsContext from '../context/UserContext';
+import UserDetailsContext, { initialUserState } from '../context/UserContext';
 
 function AddGoalScreen({ navigation }: GoalsScreenProps) {
   const { userState } = useContext(
@@ -34,7 +34,7 @@ function AddGoalScreen({ navigation }: GoalsScreenProps) {
     };
 
     try {
-      const res = await fetch(`${host}/api/goals`, {
+      const response = await fetch(`${host}/api/goals`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -44,10 +44,14 @@ function AddGoalScreen({ navigation }: GoalsScreenProps) {
         body: JSON.stringify(newGoal),
       });
 
-      const data = await res.json();
-      console.log(data);
-    } catch (error) {
-      console.log(error);
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        alert('New goal created');
+      }
+    } catch (err: any) {
+      console.log(err);
+      alert(err.message);
     }
     setTitle('');
     setDescription('');
