@@ -59,6 +59,7 @@ function LogInScreen({ navigation }: LoginScreenProps) {
         const newUserState: User = {
           userId: jwtData.sub,
           jwtToken: jwtTokenFromServer.token,
+          jwtExp: jwtData.exp,
           isLoggedIn: true,
         };
 

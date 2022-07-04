@@ -1,4 +1,6 @@
+import { Route } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import IGoal from './GoalType';
 
 export type BottomStackParamList = {
   Home: undefined;
@@ -16,6 +18,12 @@ export type AuthStackParamList = {
 export type GoalsStackParamList = {
   MyBucketlist: undefined;
   AddGoal: undefined;
+  GoalDetails: {
+    goalId: string;
+  };
+  EditGoal: {
+    goalId: string;
+  };
 };
 
 // LOG IN
@@ -39,13 +47,21 @@ export type SignUpScreenProps = {
 };
 
 // GOALS
-export type GoalsScreenNavigationProp = NativeStackNavigationProp<
+export type GoalsScreenNavigationProps = NativeStackNavigationProp<
   GoalsStackParamList,
-  'AddGoalScreen',
+  'AddGoal',
   'MyBucketlist',
-  'LogInScreen'
+  'GoalDetails',
+  'EditGoal'
 >;
 
 export type GoalsScreenProps = {
-  navigation: GoalsScreenNavigationProp;
+  navigation: GoalsScreenNavigationProps;
+  goal: IGoal;
+};
+
+// GOAL DETAILS
+export type GoalDetailsScreenProps = {
+  navigation: GoalsScreenNavigationProps;
+  route: Route;
 };

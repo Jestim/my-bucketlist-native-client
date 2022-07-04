@@ -24,34 +24,42 @@ function MyBucketlistScreen({ navigation }: GoalsScreenProps) {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    const fetchGoals = async () => {
-      const response = await fetch(
-        `${host}/api/users/${userState.userId}/goals`,
-        {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            Authorization: `Bearer ${userState.jwtToken}`,
-            'Content-Type': 'application/json',
-          },
-        },
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        setUserGoals(data);
-      } else {
-        alert(response.status);
-      }
-    };
-
     if (isFocused) {
+      const fetchGoals = async () => {
+        const response = await fetch(
+          `${host}/api/users/${userState.userId}/goals`,
+          {
+            method: 'GET',
+            headers: {
+              Accept: 'application/json',
+              Authorization: `Bearer ${userState.jwtToken}`,
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+
+          console.log(data);
+
+          if (!data.message) {
+            const goalsSortedByCreation = data.sort(
+              (a: IGoal, b: IGoal) =>
+                Date.parse(b.createdAt) - Date.parse(a.createdAt),
+            );
+            setUserGoals(goalsSortedByCreation);
+          }
+        } else {
+          alert(response.status);
+        }
+      };
+
       if (
         userState.jwtExp !== null &&
         userState.jwtExp < Date.now().toString()
       ) {
         logout(setUserState);
-        console.log(userState);
 
         return;
       }
@@ -72,7 +80,11 @@ function MyBucketlistScreen({ navigation }: GoalsScreenProps) {
         >
           {userGoals.length > 0 ? (
             userGoals.map((goal) => (
-              <GoalCardComponent goal={goal} key={goal.id} />
+              <GoalCardComponent
+                goal={goal}
+                navigation={navigation}
+                key={goal.id}
+              />
             ))
           ) : (
             <StandardTextComponent text="Add a goal to see it here" />

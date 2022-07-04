@@ -28,7 +28,6 @@ export default function BottomTabNavigator() {
         tabBarActiveBackgroundColor: colors.primary,
         tabBarInactiveBackgroundColor: colors.secondary,
       }}
-      backBehavior="history"
     >
       <Tab.Screen
         name="Home"

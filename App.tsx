@@ -32,7 +32,6 @@ function App() {
     // Check if JWT is stored on device
     const getJWTFromSecureStore = async () => {
       const jwtTokenFromSecureStore = await getJWT(jwtSecureStoreKey);
-      console.log(jwtTokenFromSecureStore);
 
       // If JWT exists then check if it is still valid
       if (jwtTokenFromSecureStore) {
@@ -51,8 +50,6 @@ function App() {
               'Content-Type': 'application/json',
             },
           });
-
-          console.log(response.status);
 
           if (response.ok) {
             // Set userState with userID, JWT and isLoggedIn

@@ -12,3 +12,17 @@ export const initialErrorState = {
   isShown: false,
   messages: [],
 };
+
+export const initialGoalState = {
+  id: '',
+  title: '',
+  description: '',
+  location: '',
+  sharedWith: [],
+  isPrivate: false,
+  isCrossedOff: false,
+  crossedOffAt: '',
+  creator: '',
+  createdAt: '',
+  updatedAt: '',
+};

@@ -13,56 +13,90 @@ import MainComponent from '../components/MainComponent';
 import HeaderComponent from '../components/HeaderComponent';
 import colors from '../styles/colors';
 import fontSizes from '../styles/fonts';
-import { GoalsScreenProps } from '../types/NavigationTypes';
+import { GoalDetailsScreenProps } from '../types/NavigationTypes';
 import host from '../helpers/host';
 import { UserDetailsContextType } from '../types/ContextTypes';
-import UserDetailsContext, { initialUserState } from '../context/UserContext';
+import UserDetailsContext from '../context/UserContext';
+import IGoal from '../types/GoalType';
+import { initialGoalState } from '../helpers/initialValues';
 
-function AddGoalScreen({ navigation }: GoalsScreenProps) {
+function EditGoalScreen(props: GoalDetailsScreenProps) {
+  const {
+    route: {
+      params: { goalId },
+    },
+    navigation,
+  } = props;
+
   const { userState } = useContext(
     UserDetailsContext,
   ) as UserDetailsContextType;
 
-  const [title, setTitle] = useState<string>();
-  const [description, setDescription] = useState<string>();
-  const [location, setLocation] = useState<string>();
+  const [goalData, setGoalData] = useState<IGoal>(initialGoalState);
 
-  const handleSubmitGoal = async () => {
-    const newGoal = {
-      title,
-      description,
-      location,
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    const fetchGoalDetails = async () => {
+      try {
+        const response = await fetch(
+          `${host}/api/users/${userState.userId}/goals/${goalId}`,
+          {
+            method: 'GET',
+            headers: {
+              Accept: 'application/json',
+              Authorization: `Bearer ${userState.jwtToken}`,
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data);
+          setGoalData(data);
+        } else {
+          console.log(response.status);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     };
 
+    if (isFocused) {
+      fetchGoalDetails().catch((err: any) => console.log(err));
+    }
+  }, [isFocused]);
+
+  const handleSubmitGoal = async () => {
+    console.log('Updated called');
+
     try {
-      const response = await fetch(`${host}/api/goals`, {
-        method: 'POST',
+      const response = await fetch(`${host}/api/goals/${goalId}`, {
+        method: 'PUT',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
           Authorization: `Bearer ${userState.jwtToken}`,
         },
-        body: JSON.stringify(newGoal),
+        body: JSON.stringify(goalData),
       });
 
       if (response.ok) {
         const data = await response.json();
         console.log(data);
-        alert('New goal created');
+        alert('Goal Updated');
       }
     } catch (err: any) {
       console.log(err);
       alert(err.message);
     }
-    setTitle('');
-    setDescription('');
-    setLocation('');
     navigation.goBack();
   };
 
   return (
     <>
-      <HeaderComponent title="Add Goal" />
+      <HeaderComponent title="Edit Goal" />
       <MainComponent>
         <KeyboardAvoidingView style={styles.SignUpContainer} behavior="height">
           <ScrollView
@@ -74,28 +108,28 @@ function AddGoalScreen({ navigation }: GoalsScreenProps) {
               style={styles.textInput}
               placeholder="Title"
               placeholderTextColor={colors.light}
-              value={title}
+              value={goalData.title}
               onChangeText={(text) => {
-                setTitle(text);
+                setGoalData({ ...goalData, title: text });
               }}
             />
             <TextInput
               style={styles.textInput}
               placeholder="Description"
               placeholderTextColor={colors.light}
-              value={description}
+              value={goalData.description}
               multiline
               onChangeText={(text) => {
-                setDescription(text);
+                setGoalData({ ...goalData, description: text });
               }}
             />
             <TextInput
               style={styles.textInput}
               placeholder="Location"
               placeholderTextColor={colors.light}
-              value={location}
+              value={goalData.location}
               onChangeText={(text) => {
-                setLocation(text);
+                setGoalData({ ...goalData, location: text });
               }}
             />
             <View style={styles.buttonContainer}>
@@ -186,4 +220,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddGoalScreen;
+export default EditGoalScreen;

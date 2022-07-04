@@ -6,8 +6,10 @@ interface IGoal {
   sharedWith: string[];
   isPrivate: boolean;
   isCrossedOff: boolean;
-  crossedOffAt: Date;
+  crossedOffAt: string;
   creator: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export default IGoal;
