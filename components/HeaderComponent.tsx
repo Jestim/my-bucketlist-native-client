@@ -3,7 +3,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useContext } from 'react';
 import colors from '../styles/colors';
 import fontSizes from '../styles/fonts';
-import { screenWidth } from '../styles/shared';
+import { screenWidth } from '../styles/dimensions';
 import logout from '../helpers/logOut';
 import UserDetailsContext from '../context/UserContext';
 import { UserDetailsContextType } from '../types/ContextTypes';

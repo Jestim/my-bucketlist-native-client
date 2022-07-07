@@ -109,6 +109,7 @@ function SignUpScreen({ navigation }: SignUpScreenProps) {
             style={styles.textInput}
             placeholder="Username"
             placeholderTextColor={colors.light}
+            autoCapitalize="none"
             value={signUpInput.username}
             onChangeText={(text) => {
               setSignUpInput({ ...signUpInput, username: text });
@@ -118,6 +119,7 @@ function SignUpScreen({ navigation }: SignUpScreenProps) {
             style={styles.textInput}
             placeholder="Email"
             placeholderTextColor={colors.light}
+            autoCapitalize="none"
             value={signUpInput.email}
             onChangeText={(text) => {
               setSignUpInput({ ...signUpInput, email: text });
@@ -128,6 +130,7 @@ function SignUpScreen({ navigation }: SignUpScreenProps) {
             placeholder="Password"
             placeholderTextColor={colors.light}
             value={signUpInput.password}
+            autoCapitalize="none"
             secureTextEntry
             onChangeText={(text) => {
               setSignUpInput({ ...signUpInput, password: text });
@@ -138,6 +141,7 @@ function SignUpScreen({ navigation }: SignUpScreenProps) {
             placeholder="Confirm Password"
             placeholderTextColor={colors.light}
             value={signUpInput.confirmPassword}
+            autoCapitalize="none"
             secureTextEntry
             onChangeText={(text) => {
               setSignUpInput({ ...signUpInput, confirmPassword: text });
@@ -165,6 +169,7 @@ function SignUpScreen({ navigation }: SignUpScreenProps) {
             style={styles.textInput}
             placeholder="Age"
             placeholderTextColor={colors.light}
+            autoCapitalize="none"
             value={signUpInput.age}
             onChangeText={(text) => {
               setSignUpInput({ ...signUpInput, age: text });

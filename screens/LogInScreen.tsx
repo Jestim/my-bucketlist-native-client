@@ -84,6 +84,7 @@ function LogInScreen({ navigation }: LoginScreenProps) {
             style={styles.textInput}
             placeholder="Username"
             placeholderTextColor={colors.light}
+            autoCapitalize="none"
             value={username}
             onChangeText={(text) => {
               setUsername(text);
@@ -93,6 +94,7 @@ function LogInScreen({ navigation }: LoginScreenProps) {
             style={styles.textInput}
             placeholder="Password"
             placeholderTextColor={colors.light}
+            autoCapitalize="none"
             secureTextEntry
             value={password}
             onChangeText={(text) => {

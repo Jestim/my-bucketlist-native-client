@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { useContext, useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
+import { AntDesign } from '@expo/vector-icons';
 import MainComponent from '../components/MainComponent';
 import HeaderComponent from '../components/HeaderComponent';
 import colors from '../styles/colors';

@@ -5,6 +5,7 @@ interface IUser {
   password: string;
   firstName: string;
   lastName: string;
+  name: string;
   age: number;
   friends: Types.ObjectId[];
 }

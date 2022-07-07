@@ -1,13 +1,7 @@
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import colors from '../styles/colors';
 import fontSizes from '../styles/fonts';
-import IGoal from '../types/GoalType';
 import { GoalsScreenProps } from '../types/NavigationTypes';
-
-// interface IProp {
-//   goal: IGoal;
-//   navigation: GoalsScreenNavigationProp;
-// }
 
 function GoalCardComponent({ goal, navigation }: GoalsScreenProps) {
   const { title, description, location, id } = goal;
@@ -39,7 +33,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '75%',
     marginVertical: 16,
-    padding: 8,
+    paddingHorizontal: 8,
+    paddingTop: 16,
     borderWidth: 1,
     borderRadius: 8,
     borderColor: colors.light,
@@ -76,6 +71,7 @@ const styles = StyleSheet.create({
   detailsText: {
     color: colors.light,
     fontSize: fontSizes.small,
+    marginBottom: 8,
   },
 });
 

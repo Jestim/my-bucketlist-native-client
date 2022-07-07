@@ -4,19 +4,21 @@ import { useEffect, useContext, useState } from 'react';
 import { Feather, AntDesign } from '@expo/vector-icons';
 import MainComponent from '../components/MainComponent';
 import HeaderComponent from '../components/HeaderComponent';
-import { GoalDetailsScreenProps } from '../types/NavigationTypes';
+import {
+  GoalDetailsScreenProps,
+  UserDetailsScreenProps,
+} from '../types/NavigationTypes';
 import UserDetailsContext from '../context/UserContext';
 import { UserDetailsContextType } from '../types/ContextTypes';
 import host from '../helpers/host';
-import IGoal from '../types/GoalType';
-import { initialGoalState } from '../helpers/initialValues';
 import colors from '../styles/colors';
 import fontSizes from '../styles/fonts';
+import IUser from '../types/userType';
 
-function GoalDetailsScreen(props: GoalDetailsScreenProps) {
+function UserDetailsScreen(props: UserDetailsScreenProps) {
   const {
     route: {
-      params: { goalId },
+      params: { userId },
     },
     navigation,
   } = props;
@@ -25,29 +27,26 @@ function GoalDetailsScreen(props: GoalDetailsScreenProps) {
     UserDetailsContext,
   ) as UserDetailsContextType;
 
-  const [goalData, setGoalData] = useState<IGoal>(initialGoalState);
+  const [userData, setUserData] = useState<IUser | null>(null);
 
   const isFocused = useIsFocused();
 
   useEffect(() => {
     const fetchGoalDetails = async () => {
       try {
-        const response = await fetch(
-          `${host}/api/users/${userState.userId}/goals/${goalId}`,
-          {
-            method: 'GET',
-            headers: {
-              Accept: 'application/json',
-              Authorization: `Bearer ${userState.jwtToken}`,
-              'Content-Type': 'application/json',
-            },
+        const response = await fetch(`${host}/api/users/${userId}`, {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${userState.jwtToken}`,
+            'Content-Type': 'application/json',
           },
-        );
+        });
 
         if (response.ok) {
           const data = await response.json();
           console.log(data);
-          setGoalData(data);
+          setUserData(data);
         } else {
           console.log(response.status);
         }
@@ -63,28 +62,28 @@ function GoalDetailsScreen(props: GoalDetailsScreenProps) {
 
   return (
     <>
-      <HeaderComponent title="Goal Details" />
+      <HeaderComponent title="User Details" />
       <MainComponent>
-        <View style={styles.goalContainer}>
-          <View style={styles.headerTextContainer}>
-            <Text style={styles.headerText}>{goalData.title}</Text>
+        {userData ? (
+          <View style={styles.userContainer}>
+            <View style={styles.headerTextContainer}>
+              <Text style={styles.headerText}>{userData.username}</Text>
+            </View>
+            <View style={styles.userDetailsContainer}>
+              <Text style={styles.detailsText}>{userData.name}</Text>
+              <Text style={styles.detailsText}>{userData.age}</Text>
+            </View>
           </View>
-          <View style={styles.goalDetailsContainer}>
-            <Text style={styles.detailsText}>{goalData.description}</Text>
-            <Text style={styles.detailsText}>{goalData.location}</Text>
-          </View>
-        </View>
+        ) : null}
         <Pressable
           style={({ pressed }) =>
-            pressed ? [styles.editGoal, styles.pressed] : styles.editGoal
+            pressed ? [styles.button, styles.pressed] : styles.button
           }
-          pressRetentionOffset={{ bottom: 20, left: 20, right: 20, top: 20 }}
-          hitSlop={{ bottom: 20, left: 20, right: 20, top: 20 }}
           onPress={() => {
-            navigation.navigate('EditGoal', { goalId });
+            console.log('add friend');
           }}
         >
-          <Feather name="edit" size={42} color={colors.light} />
+          <Text style={styles.buttonText}>Add Friend</Text>
         </Pressable>
         <Pressable
           style={({ pressed }) =>
@@ -104,7 +103,7 @@ function GoalDetailsScreen(props: GoalDetailsScreenProps) {
 }
 
 const styles = StyleSheet.create({
-  goalContainer: {
+  userContainer: {
     alignItems: 'center',
     width: '75%',
     marginVertical: 16,
@@ -134,7 +133,7 @@ const styles = StyleSheet.create({
     color: colors.light,
     fontSize: fontSizes.medium,
   },
-  goalDetailsContainer: {
+  userDetailsContainer: {
     width: '80%',
     alignItems: 'center',
     marginBottom: 8,
@@ -144,10 +143,23 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.small,
     marginBottom: 8,
   },
-  editGoal: {
+  button: {
+    width: '40%',
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.light,
+    borderRadius: 8,
+    backgroundColor: colors.secondary,
     position: 'absolute',
     bottom: 36,
     right: 36,
+  },
+  buttonText: {
+    color: colors.light,
   },
   backButton: {
     position: 'absolute',
@@ -159,4 +171,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GoalDetailsScreen;
+export default UserDetailsScreen;

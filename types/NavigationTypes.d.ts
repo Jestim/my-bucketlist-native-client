@@ -26,6 +26,13 @@ export type GoalsStackParamList = {
   };
 };
 
+export type SearchStackParamList = {
+  SearchFriend: undefined;
+  UserDetails: {
+    userId: string;
+  };
+};
+
 // LOG IN
 export type LoginScreenNavigationProp = NativeStackNavigationProp<
   AuthStackParamList,
@@ -63,5 +70,21 @@ export type GoalsScreenProps = {
 // GOAL DETAILS
 export type GoalDetailsScreenProps = {
   navigation: GoalsScreenNavigationProps;
+  route: Route;
+};
+
+// SEARCH
+export type SearchScreenNavigationProps = NativeStackNavigationProp<
+  SearchStackParamList,
+  'SearchFriend',
+  'UserDetails'
+>;
+
+export type SearchScreenProps = {
+  navigation: SearchScreenNavigationProps;
+};
+
+export type UserDetailsScreenProps = {
+  navigation: SearchScreenNavigationProps;
   route: Route;
 };

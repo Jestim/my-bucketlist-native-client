@@ -15,6 +15,7 @@ import SearchScreen from '../screens/SearchScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import colors from '../styles/colors';
 import GoalStackNavigator from './GoalsStackNavigator';
+import SearchStackNavigator from './SearchStackNavigator';
 
 const Tab = createBottomTabNavigator<BottomStackParamList>();
 
@@ -58,7 +59,7 @@ export default function BottomTabNavigator() {
       />
       <Tab.Screen
         name="Search"
-        component={SearchScreen}
+        component={SearchStackNavigator}
         options={{
           tabBarIcon: () => (
             <FontAwesome5 name="search" size={24} color={colors.light} />
