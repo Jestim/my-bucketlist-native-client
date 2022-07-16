@@ -1,18 +1,22 @@
 import { createContext } from 'react';
-import { User, UserDetailsContextType } from '../types/ContextTypes';
+import {
+  CurrentUser,
+  CurrentUserDetailsContextType,
+} from '../types/ContextTypes';
 
-export const initialUserState: User = {
+export const initialUserState: CurrentUser = {
   userId: null,
   jwtToken: null,
   jwtExp: null,
   isLoggedIn: false,
 };
 
-const initialState: UserDetailsContextType = {
+const initialState: CurrentUserDetailsContextType = {
   userState: initialUserState,
   setUserState: () => {},
 };
 
-const UserDetailsContext = createContext<UserDetailsContextType>(initialState);
+const CurrentUserDetailsContext =
+  createContext<CurrentUserDetailsContextType>(initialState);
 
-export default UserDetailsContext;
+export default CurrentUserDetailsContext;

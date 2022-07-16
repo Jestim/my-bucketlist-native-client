@@ -9,22 +9,25 @@ import jwtDecode from 'jwt-decode';
 import AuthStackNavigator from './navigation/AuthStackNavigator';
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import { getJWT } from './helpers/secureStore';
-import { User } from './types/ContextTypes';
-import UserDetailsContext, { initialUserState } from './context/UserContext';
+import { CurrentUser } from './types/ContextTypes';
+import CurrentUserDetailsContext, {
+  initialUserState,
+} from './context/UserContext';
 import colors from './styles/colors';
 import jwtSecureStoreKey from './helpers/variables';
 import host from './helpers/host';
 
 function App() {
-  const [userState, setUserState] = useState<User>(initialUserState);
+  const [currentUserState, setCurrentUserState] =
+    useState<CurrentUser>(initialUserState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const userDetails = useMemo(
+  const currentUserDetails = useMemo(
     () => ({
-      userState,
-      setUserState,
+      currentUserState,
+      setCurrentUserState,
     }),
-    [userState, setUserState],
+    [currentUserState, setCurrentUserState],
   );
 
   useEffect(() => {
@@ -52,15 +55,15 @@ function App() {
           });
 
           if (response.ok) {
-            // Set userState with userID, JWT and isLoggedIn
-            const newUserState: User = {
+            // Set currentUserState with userID, JWT and isLoggedIn
+            const newUserState: CurrentUser = {
               userId: jwtPayload.sub,
               jwtToken: jwtTokenFromSecureStore,
               jwtExp: jwtPayload.exp,
               isLoggedIn: true,
             };
 
-            setUserState(newUserState);
+            setCurrentUserState(newUserState);
           }
         }
       }
@@ -86,13 +89,13 @@ function App() {
             style={styles.spinner}
           />
         ) : (
-          <UserDetailsContext.Provider value={userDetails}>
-            {userState.isLoggedIn ? (
+          <CurrentUserDetailsContext.Provider value={currentUserDetails}>
+            {currentUserState.isLoggedIn ? (
               <BottomTabNavigator />
             ) : (
               <AuthStackNavigator />
             )}
-          </UserDetailsContext.Provider>
+          </CurrentUserDetailsContext.Provider>
         )}
       </NavigationContainer>
     </SafeAreaView>

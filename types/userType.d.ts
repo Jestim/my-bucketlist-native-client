@@ -1,5 +1,10 @@
+export interface IFriendRequest {
+  userId: Types.ObjectId;
+  status: 'pending' | 'accepted' | 'rejected';
+}
+
 interface IUser {
-  id: string;
+  id: Types.ObjectId;
   username: string;
   email: string;
   password: string;
@@ -8,6 +13,7 @@ interface IUser {
   name: string;
   age: number;
   friends: Types.ObjectId[];
+  friendRequests: IFriendRequest[];
 }
 
 export default IUser;

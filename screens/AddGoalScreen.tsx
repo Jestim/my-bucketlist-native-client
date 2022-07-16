@@ -15,13 +15,13 @@ import colors from '../styles/colors';
 import fontSizes from '../styles/fonts';
 import { GoalsScreenProps } from '../types/NavigationTypes';
 import host from '../helpers/host';
-import { UserDetailsContextType } from '../types/ContextTypes';
+import { CurrentUserDetailsContextType } from '../types/ContextTypes';
 import UserDetailsContext, { initialUserState } from '../context/UserContext';
 
 function AddGoalScreen({ navigation }: GoalsScreenProps) {
-  const { userState } = useContext(
+  const { currentUserState } = useContext(
     UserDetailsContext,
-  ) as UserDetailsContextType;
+  ) as CurrentUserDetailsContextType;
 
   const [title, setTitle] = useState<string>();
   const [description, setDescription] = useState<string>();
@@ -40,7 +40,7 @@ function AddGoalScreen({ navigation }: GoalsScreenProps) {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${userState.jwtToken}`,
+          Authorization: `Bearer ${currentUserState.jwtToken}`,
         },
         body: JSON.stringify(newGoal),
       });

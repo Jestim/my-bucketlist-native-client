@@ -16,14 +16,14 @@ import colors from '../styles/colors';
 import fontSizes from '../styles/fonts';
 import IUser from '../types/userType';
 import host from '../helpers/host';
-import UserDetailsContext from '../context/UserContext';
-import { UserDetailsContextType } from '../types/ContextTypes';
+import CurrentUserDetailsContext from '../context/UserContext';
+import { CurrentUserDetailsContextType } from '../types/ContextTypes';
 import { SearchScreenProps } from '../types/NavigationTypes';
 
 function SearchScreen({ navigation }: SearchScreenProps) {
-  const { userState } = useContext(
-    UserDetailsContext,
-  ) as UserDetailsContextType;
+  const { currentUserState } = useContext(
+    CurrentUserDetailsContext,
+  ) as CurrentUserDetailsContextType;
 
   const [username, setUsername] = useState<string>('');
   const [friend, setFriend] = useState<IUser | null>(null);
@@ -35,7 +35,7 @@ function SearchScreen({ navigation }: SearchScreenProps) {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${userState.jwtToken}`,
+          Authorization: `Bearer ${currentUserState.jwtToken}`,
         },
       });
 

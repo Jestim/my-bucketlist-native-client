@@ -1,19 +1,17 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { useEffect, useContext, useState } from 'react';
-import { Feather, AntDesign } from '@expo/vector-icons';
 import MainComponent from '../components/MainComponent';
 import HeaderComponent from '../components/HeaderComponent';
-import {
-  GoalDetailsScreenProps,
-  UserDetailsScreenProps,
-} from '../types/NavigationTypes';
+import { UserDetailsScreenProps } from '../types/NavigationTypes';
 import UserDetailsContext from '../context/UserContext';
-import { UserDetailsContextType } from '../types/ContextTypes';
+import { CurrentUserDetailsContextType } from '../types/ContextTypes';
 import host from '../helpers/host';
 import colors from '../styles/colors';
 import fontSizes from '../styles/fonts';
 import IUser from '../types/userType';
+import AddFriendButton from '../components/AddFriendButton';
+import GoBackButton from '../components/GoBackButton';
 
 function UserDetailsScreen(props: UserDetailsScreenProps) {
   const {
@@ -23,9 +21,9 @@ function UserDetailsScreen(props: UserDetailsScreenProps) {
     navigation,
   } = props;
 
-  const { userState } = useContext(
+  const { currentUserState } = useContext(
     UserDetailsContext,
-  ) as UserDetailsContextType;
+  ) as CurrentUserDetailsContextType;
 
   const [userData, setUserData] = useState<IUser | null>(null);
 
@@ -38,14 +36,13 @@ function UserDetailsScreen(props: UserDetailsScreenProps) {
           method: 'GET',
           headers: {
             Accept: 'application/json',
-            Authorization: `Bearer ${userState.jwtToken}`,
+            Authorization: `Bearer ${currentUserState.jwtToken}`,
             'Content-Type': 'application/json',
           },
         });
 
         if (response.ok) {
           const data = await response.json();
-          console.log(data);
           setUserData(data);
         } else {
           console.log(response.status);
@@ -75,28 +72,11 @@ function UserDetailsScreen(props: UserDetailsScreenProps) {
             </View>
           </View>
         ) : null}
-        <Pressable
-          style={({ pressed }) =>
-            pressed ? [styles.button, styles.pressed] : styles.button
-          }
-          onPress={() => {
-            console.log('add friend');
-          }}
-        >
-          <Text style={styles.buttonText}>Add Friend</Text>
-        </Pressable>
-        <Pressable
-          style={({ pressed }) =>
-            pressed ? [styles.backButton, styles.pressed] : styles.backButton
-          }
-          pressRetentionOffset={{ bottom: 20, left: 20, right: 20, top: 20 }}
-          hitSlop={{ bottom: 20, left: 20, right: 20, top: 20 }}
-          onPress={() => {
-            navigation.goBack();
-          }}
-        >
-          <AntDesign name="arrowleft" size={42} color={colors.light} />
-        </Pressable>
+        <GoBackButton navigation={navigation} />
+        <AddFriendButton
+          friendData={userData}
+          currentUserState={currentUserState}
+        />
       </MainComponent>
     </>
   );

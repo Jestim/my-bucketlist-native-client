@@ -15,7 +15,10 @@ import fontSizes from '../styles/fonts';
 import { LoginScreenProps } from '../types/NavigationTypes';
 import host from '../helpers/host';
 import UserDetailsContext from '../context/UserContext';
-import { UserDetailsContextType, User } from '../types/ContextTypes';
+import {
+  CurrentUserDetailsContextType,
+  CurrentUser,
+} from '../types/ContextTypes';
 import { saveJWT } from '../helpers/secureStore';
 import jwtSecureStoreKey from '../helpers/variables';
 
@@ -23,9 +26,9 @@ function LogInScreen({ navigation }: LoginScreenProps) {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
-  const { userState, setUserState } = useContext(
+  const { setCurrentUserState } = useContext(
     UserDetailsContext,
-  ) as UserDetailsContextType;
+  ) as CurrentUserDetailsContextType;
 
   const handleLogIn = async () => {
     console.log('handleLogIn called');
@@ -55,8 +58,8 @@ function LogInScreen({ navigation }: LoginScreenProps) {
           jwtTokenFromServer.token,
         );
 
-        // Set userState with userID, JWT and isLoggedIn
-        const newUserState: User = {
+        // Set currentUserState with userID, JWT and isLoggedIn
+        const newUserState: CurrentUser = {
           userId: jwtData.sub,
           jwtToken: jwtTokenFromServer.token,
           jwtExp: jwtData.exp,
@@ -65,7 +68,7 @@ function LogInScreen({ navigation }: LoginScreenProps) {
 
         setUsername('');
         setPassword('');
-        setUserState(newUserState);
+        setCurrentUserState(newUserState);
       } else {
         console.log(response.status);
       }

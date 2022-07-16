@@ -9,15 +9,14 @@ import {
 } from 'react-native';
 import { useContext, useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
-import { AntDesign } from '@expo/vector-icons';
 import MainComponent from '../components/MainComponent';
 import HeaderComponent from '../components/HeaderComponent';
 import colors from '../styles/colors';
 import fontSizes from '../styles/fonts';
 import { GoalDetailsScreenProps } from '../types/NavigationTypes';
 import host from '../helpers/host';
-import { UserDetailsContextType } from '../types/ContextTypes';
-import UserDetailsContext from '../context/UserContext';
+import { CurrentUserDetailsContextType } from '../types/ContextTypes';
+import CurrentUserDetailsContext from '../context/UserContext';
 import IGoal from '../types/GoalType';
 import { initialGoalState } from '../helpers/initialValues';
 
@@ -29,9 +28,9 @@ function EditGoalScreen(props: GoalDetailsScreenProps) {
     navigation,
   } = props;
 
-  const { userState } = useContext(
-    UserDetailsContext,
-  ) as UserDetailsContextType;
+  const { currentUserState } = useContext(
+    CurrentUserDetailsContext,
+  ) as CurrentUserDetailsContextType;
 
   const [goalData, setGoalData] = useState<IGoal>(initialGoalState);
 
@@ -41,12 +40,12 @@ function EditGoalScreen(props: GoalDetailsScreenProps) {
     const fetchGoalDetails = async () => {
       try {
         const response = await fetch(
-          `${host}/api/users/${userState.userId}/goals/${goalId}`,
+          `${host}/api/users/${currentUserState.userId}/goals/${goalId}`,
           {
             method: 'GET',
             headers: {
               Accept: 'application/json',
-              Authorization: `Bearer ${userState.jwtToken}`,
+              Authorization: `Bearer ${currentUserState.jwtToken}`,
               'Content-Type': 'application/json',
             },
           },
@@ -78,7 +77,7 @@ function EditGoalScreen(props: GoalDetailsScreenProps) {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${userState.jwtToken}`,
+          Authorization: `Bearer ${currentUserState.jwtToken}`,
         },
         body: JSON.stringify(goalData),
       });

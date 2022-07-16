@@ -5,13 +5,14 @@ import { Feather, AntDesign } from '@expo/vector-icons';
 import MainComponent from '../components/MainComponent';
 import HeaderComponent from '../components/HeaderComponent';
 import { GoalDetailsScreenProps } from '../types/NavigationTypes';
-import UserDetailsContext from '../context/UserContext';
-import { UserDetailsContextType } from '../types/ContextTypes';
+import CurrentUserDetailsContext from '../context/UserContext';
+import { CurrentUserDetailsContextType } from '../types/ContextTypes';
 import host from '../helpers/host';
 import IGoal from '../types/GoalType';
 import { initialGoalState } from '../helpers/initialValues';
 import colors from '../styles/colors';
 import fontSizes from '../styles/fonts';
+import GoBackButton from '../components/GoBackButton';
 
 function GoalDetailsScreen(props: GoalDetailsScreenProps) {
   const {
@@ -21,9 +22,9 @@ function GoalDetailsScreen(props: GoalDetailsScreenProps) {
     navigation,
   } = props;
 
-  const { userState } = useContext(
-    UserDetailsContext,
-  ) as UserDetailsContextType;
+  const { currentUserState } = useContext(
+    CurrentUserDetailsContext,
+  ) as CurrentUserDetailsContextType;
 
   const [goalData, setGoalData] = useState<IGoal>(initialGoalState);
 
@@ -33,12 +34,12 @@ function GoalDetailsScreen(props: GoalDetailsScreenProps) {
     const fetchGoalDetails = async () => {
       try {
         const response = await fetch(
-          `${host}/api/users/${userState.userId}/goals/${goalId}`,
+          `${host}/api/users/${currentUserState.userId}/goals/${goalId}`,
           {
             method: 'GET',
             headers: {
               Accept: 'application/json',
-              Authorization: `Bearer ${userState.jwtToken}`,
+              Authorization: `Bearer ${currentUserState.jwtToken}`,
               'Content-Type': 'application/json',
             },
           },
@@ -86,18 +87,7 @@ function GoalDetailsScreen(props: GoalDetailsScreenProps) {
         >
           <Feather name="edit" size={42} color={colors.light} />
         </Pressable>
-        <Pressable
-          style={({ pressed }) =>
-            pressed ? [styles.backButton, styles.pressed] : styles.backButton
-          }
-          pressRetentionOffset={{ bottom: 20, left: 20, right: 20, top: 20 }}
-          hitSlop={{ bottom: 20, left: 20, right: 20, top: 20 }}
-          onPress={() => {
-            navigation.goBack();
-          }}
-        >
-          <AntDesign name="arrowleft" size={42} color={colors.light} />
-        </Pressable>
+        <GoBackButton navigation={navigation} />
       </MainComponent>
     </>
   );

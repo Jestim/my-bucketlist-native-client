@@ -7,17 +7,19 @@ import MainComponent from '../components/MainComponent';
 import colors from '../styles/colors';
 import { GoalsScreenProps } from '../types/NavigationTypes';
 import host from '../helpers/host';
-import UserDetailsContext, { initialUserState } from '../context/UserContext';
-import { UserDetailsContextType } from '../types/ContextTypes';
+import CurrentUserDetailsContext, {
+  initialUserState,
+} from '../context/UserContext';
+import { CurrentUserDetailsContextType } from '../types/ContextTypes';
 import IGoal from '../types/GoalType';
 import GoalCardComponent from '../components/GoalCardComponent';
 import StandardTextComponent from '../components/StandardTextComponent';
 import logout from '../helpers/logOut';
 
 function MyBucketlistScreen({ navigation }: GoalsScreenProps) {
-  const { userState, setUserState } = useContext(
-    UserDetailsContext,
-  ) as UserDetailsContextType;
+  const { currentUserState, setCurrentUserState } = useContext(
+    CurrentUserDetailsContext,
+  ) as CurrentUserDetailsContextType;
 
   const [userGoals, setUserGoals] = useState<IGoal[]>([]);
 
@@ -27,12 +29,12 @@ function MyBucketlistScreen({ navigation }: GoalsScreenProps) {
     if (isFocused) {
       const fetchGoals = async () => {
         const response = await fetch(
-          `${host}/api/users/${userState.userId}/goals`,
+          `${host}/api/users/${currentUserState.userId}/goals`,
           {
             method: 'GET',
             headers: {
               Accept: 'application/json',
-              Authorization: `Bearer ${userState.jwtToken}`,
+              Authorization: `Bearer ${currentUserState.jwtToken}`,
               'Content-Type': 'application/json',
             },
           },
@@ -56,10 +58,10 @@ function MyBucketlistScreen({ navigation }: GoalsScreenProps) {
       };
 
       if (
-        userState.jwtExp !== null &&
-        userState.jwtExp < Date.now().toString()
+        currentUserState.jwtExp !== null &&
+        currentUserState.jwtExp < Date.now().toString()
       ) {
-        logout(setUserState);
+        logout(setCurrentUserState);
 
         return;
       }

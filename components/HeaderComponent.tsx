@@ -6,14 +6,14 @@ import fontSizes from '../styles/fonts';
 import { screenWidth } from '../styles/dimensions';
 import logout from '../helpers/logOut';
 import UserDetailsContext from '../context/UserContext';
-import { UserDetailsContextType } from '../types/ContextTypes';
+import { CurrentUserDetailsContextType } from '../types/ContextTypes';
 
 function HeaderComponent(props: { title: string }) {
   const { title } = props;
 
-  const { setUserState } = useContext(
+  const { setCurrentUserState } = useContext(
     UserDetailsContext,
-  ) as UserDetailsContextType;
+  ) as CurrentUserDetailsContextType;
 
   return (
     <View style={styles.container}>
@@ -22,7 +22,7 @@ function HeaderComponent(props: { title: string }) {
         <Pressable
           style={styles.logout}
           onPress={() => {
-            logout(setUserState);
+            logout(setCurrentUserState);
           }}
         >
           <MaterialIcons name="logout" size={36} color={colors.light} />

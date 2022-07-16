@@ -1,11 +1,11 @@
-export type User = {
+export type CurrentUser = {
   userId: string | null;
   jwtToken: string | null;
   jwtExp: string | null;
   isLoggedIn: boolean;
 };
 
-export type UserDetailsContextType = {
-  userState: User;
-  setUserState: React.Dispatch<React.SetStateAction<User>>;
+export type CurrentUserDetailsContextType = {
+  currentUserState: CurrentUser;
+  setCurrentUserState: React.Dispatch<React.SetStateAction<CurrentUser>>;
 };
