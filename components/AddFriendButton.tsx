@@ -1,21 +1,27 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import IUser from '../types/userType';
 import { CurrentUser } from '../types/ContextTypes';
 import colors from '../styles/colors';
 import host from '../helpers/host';
 
 type Props = {
-  friendData: IUser | null;
+  friendData: IUser;
   currentUserState: CurrentUser;
 };
 
 function AddFriendButton({ friendData, currentUserState }: Props) {
-  const [friendUserData, setFriendUserData] = useState<IUser | null>(
-    friendData,
-  );
+  const [friendUserData, setFriendUserData] = useState<IUser>(friendData);
+
+  console.log(friendData);
+
+  useEffect(() => {
+    setFriendUserData(friendData);
+  }, [friendData]);
 
   const handleAddFriend = async () => {
+    console.log('handleAddFriend called');
+
     if (!friendUserData) {
       return;
     }
@@ -47,6 +53,10 @@ function AddFriendButton({ friendData, currentUserState }: Props) {
     // TODO
     console.log('handleCancelFriendRequest called');
   };
+
+  if (!friendUserData) {
+    console.log('friendUserData is undefined');
+  }
 
   // show no button if the current user is the same as the displayed user
   // or if the current user and displayed are user already friends

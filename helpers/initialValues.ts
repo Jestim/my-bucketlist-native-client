@@ -1,3 +1,5 @@
+import IUser from '../types/userType';
+
 export const initialSignUpInput = {
   username: '',
   email: '',
@@ -25,4 +27,17 @@ export const initialGoalState = {
   creator: '',
   createdAt: '',
   updatedAt: '',
+};
+
+export const placeholderUser: IUser = {
+  id: '',
+  username: '',
+  email: '',
+  password: '',
+  firstName: '',
+  lastName: '',
+  name: '',
+  age: 0,
+  friends: [],
+  friendRequests: [],
 };

@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import { View, Text, StyleSheet } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { useEffect, useContext, useState } from 'react';
@@ -12,6 +13,9 @@ import fontSizes from '../styles/fonts';
 import IUser from '../types/userType';
 import AddFriendButton from '../components/AddFriendButton';
 import GoBackButton from '../components/GoBackButton';
+import ErrorsType from '../types/ErrorsType';
+import { initialErrorState, placeholderUser } from '../helpers/initialValues';
+import ErrorCard from '../components/ErrorCard';
 
 function UserDetailsScreen(props: UserDetailsScreenProps) {
   const {
@@ -25,7 +29,8 @@ function UserDetailsScreen(props: UserDetailsScreenProps) {
     UserDetailsContext,
   ) as CurrentUserDetailsContextType;
 
-  const [userData, setUserData] = useState<IUser | null>(null);
+  const [userData, setUserData] = useState<IUser>(placeholderUser);
+  const [errors, setErrors] = useState<ErrorsType>(initialErrorState);
 
   const isFocused = useIsFocused();
 
@@ -57,11 +62,20 @@ function UserDetailsScreen(props: UserDetailsScreenProps) {
     }
   }, [isFocused]);
 
+  if (!userData) {
+    setErrors({
+      isShown: true,
+      messages: ['Could not find user'],
+    });
+  }
+
   return (
     <>
       <HeaderComponent title="User Details" />
       <MainComponent>
-        {userData ? (
+        {errors.isShown ? (
+          <ErrorCard messages={errors.messages} />
+        ) : userData ? (
           <View style={styles.userContainer}>
             <View style={styles.headerTextContainer}>
               <Text style={styles.headerText}>{userData.username}</Text>
