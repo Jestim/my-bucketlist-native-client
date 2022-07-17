@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import IUser from '../types/userType';
 import { CurrentUser } from '../types/ContextTypes';
 import colors from '../styles/colors';
@@ -11,13 +11,9 @@ type Props = {
 };
 
 function AddFriendButton({ friendData, currentUserState }: Props) {
-  const [friendUserData, setFriendUserData] = useState<IUser>();
-
-  useEffect(() => {
-    if (friendData) {
-      setFriendUserData(friendData);
-    }
-  }, [friendData]);
+  const [friendUserData, setFriendUserData] = useState<IUser | null>(
+    friendData,
+  );
 
   const handleAddFriend = async () => {
     if (!friendUserData) {
@@ -47,6 +43,13 @@ function AddFriendButton({ friendData, currentUserState }: Props) {
     }
   };
 
+  const handleCancelFriendRequest = () => {
+    // TODO
+    console.log('handleCancelFriendRequest called');
+  };
+
+  // show no button if the current user is the same as the displayed user
+  // or if the current user and displayed are user already friends
   if (
     friendUserData?.id === currentUserState.userId ||
     friendUserData?.friends.includes(currentUserState.userId)
@@ -54,37 +57,42 @@ function AddFriendButton({ friendData, currentUserState }: Props) {
     return null;
   }
 
-  // eslint-disable-next-line consistent-return
-  friendUserData?.friendRequests.forEach((friendRequest) => {
-    if (
-      friendRequest.userId === currentUserState.userId &&
-      friendRequest.status === 'pending'
-    ) {
-      return (
-        <Pressable
-          style={({ pressed }) =>
-            pressed ? [styles.button, styles.pressed] : styles.button
-          }
-          onPress={() => {
-            console.log('Cancel friend request');
-          }}
-        >
-          <Text style={styles.buttonText}>Cancel Friendrequest</Text>
-        </Pressable>
-      );
-    }
+  if (friendUserData) {
+    for (let i = 0; i < friendUserData?.friendRequests.length; i++) {
+      // if request is already sent and pending show a button to cancel friend request
+      if (
+        friendUserData.friendRequests[i].userId === currentUserState.userId &&
+        friendUserData.friendRequests[i].status === 'pending'
+      ) {
+        return (
+          <Pressable
+            style={({ pressed }) =>
+              pressed ? [styles.button, styles.pressed] : styles.button
+            }
+            onPress={handleCancelFriendRequest}
+          >
+            <Text style={styles.buttonText} testID="buttonText">
+              Cancel Friend Request
+            </Text>
+          </Pressable>
+        );
+      }
 
-    if (
-      friendRequest.userId === currentUserState.userId &&
-      friendRequest.status === 'rejected'
-    ) {
-      return (
-        <View style={styles.button}>
-          <Text style={styles.buttonText}>Friendrequest rejected</Text>
-        </View>
-      );
+      // if friend request has been rejected show an unpressable button
+      if (
+        friendUserData.friendRequests[i].userId === currentUserState.userId &&
+        friendUserData.friendRequests[i].status === 'rejected'
+      ) {
+        return (
+          <View style={styles.button}>
+            <Text style={styles.buttonText} testID="buttonText">
+              Friend Request Rejected
+            </Text>
+          </View>
+        );
+      }
     }
-  });
+  }
 
   return (
     <Pressable
@@ -92,8 +100,11 @@ function AddFriendButton({ friendData, currentUserState }: Props) {
         pressed ? [styles.button, styles.pressed] : styles.button
       }
       onPress={handleAddFriend}
+      testID="pressable"
     >
-      <Text style={styles.buttonText}>Add Friend</Text>
+      <Text style={styles.buttonText} testID="buttonText">
+        Add Friend
+      </Text>
     </Pressable>
   );
 }
