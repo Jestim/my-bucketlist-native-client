@@ -8,6 +8,10 @@ type Props = {
 };
 
 function ErrorCard({ messages }: Props) {
+  if (messages.length <= 0) {
+    return null;
+  }
+
   return (
     <View style={styles.container}>
       {messages.map((message) => (

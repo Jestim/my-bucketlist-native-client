@@ -26,43 +26,40 @@ function MyBucketlistScreen({ navigation }: GoalsScreenProps) {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    if (isFocused) {
-      const fetchGoals = async () => {
-        const response = await fetch(
-          `${host}/api/users/${currentUserState.userId}/goals`,
-          {
-            method: 'GET',
-            headers: {
-              Accept: 'application/json',
-              Authorization: `Bearer ${currentUserState.jwtToken}`,
-              'Content-Type': 'application/json',
-            },
+    const fetchGoals = async () => {
+      const response = await fetch(
+        `${host}/api/users/${currentUserState.userId}/goals`,
+        {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${currentUserState.jwtToken}`,
+            'Content-Type': 'application/json',
           },
-        );
+        },
+      );
 
-        if (response.ok) {
-          const data = await response.json();
+      if (response.ok) {
+        const data = await response.json();
 
-          console.log(data);
-
-          if (!data.message) {
-            const goalsSortedByCreation = data.sort(
-              (a: IGoal, b: IGoal) =>
-                Date.parse(b.createdAt) - Date.parse(a.createdAt),
-            );
-            setUserGoals(goalsSortedByCreation);
-          }
-        } else {
-          alert(response.status);
+        if (!data.message) {
+          const goalsSortedByCreation = data.sort(
+            (a: IGoal, b: IGoal) =>
+              Date.parse(b.createdAt) - Date.parse(a.createdAt),
+          );
+          setUserGoals(goalsSortedByCreation);
         }
-      };
+      } else {
+        alert(response.status);
+      }
+    };
 
+    if (isFocused) {
       if (
         currentUserState.jwtExp !== null &&
         currentUserState.jwtExp < Date.now().toString()
       ) {
         logout(setCurrentUserState);
-
         return;
       }
       fetchGoals().catch((err: any) => {

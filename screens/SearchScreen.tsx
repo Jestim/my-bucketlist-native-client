@@ -19,6 +19,9 @@ import host from '../helpers/host';
 import CurrentUserDetailsContext from '../context/UserContext';
 import { CurrentUserDetailsContextType } from '../types/ContextTypes';
 import { SearchScreenProps } from '../types/NavigationTypes';
+import { initialErrorState } from '../helpers/initialValues';
+import ErrorsType from '../types/ErrorsType';
+import ErrorCard from '../components/ErrorCard';
 
 function SearchScreen({ navigation }: SearchScreenProps) {
   const { currentUserState } = useContext(
@@ -27,8 +30,17 @@ function SearchScreen({ navigation }: SearchScreenProps) {
 
   const [username, setUsername] = useState<string>('');
   const [friend, setFriend] = useState<IUser | null>(null);
+  const [errors, setErrors] = useState<ErrorsType>(initialErrorState);
 
   const getFriendDetails = async () => {
+    if (username === '') {
+      setErrors({
+        isShown: true,
+        messages: ['Enter a username!'],
+      });
+      return;
+    }
+
     try {
       const response = await fetch(`${host}/api/users/username/${username}`, {
         method: 'GET',
@@ -39,11 +51,26 @@ function SearchScreen({ navigation }: SearchScreenProps) {
         },
       });
 
+      console.log(response.status);
+      const data = await response.json();
+
       if (response.ok) {
-        const data = await response.json();
         setFriend(data);
+        setErrors({
+          isShown: false,
+          messages: [],
+        });
+      } else {
+        setErrors({
+          isShown: true,
+          messages: [data.message],
+        });
       }
     } catch (err) {
+      setErrors({
+        isShown: true,
+        messages: ['Something went wrong'],
+      });
       console.log(err);
     }
   };
@@ -82,7 +109,7 @@ function SearchScreen({ navigation }: SearchScreenProps) {
               </Pressable>
             </View>
 
-            {friend ? (
+            {friend && !errors.isShown ? (
               <Pressable
                 style={({ pressed }) =>
                   pressed
@@ -101,7 +128,9 @@ function SearchScreen({ navigation }: SearchScreenProps) {
                   <Text style={styles.detailsText}>{friend.age}</Text>
                 </View>
               </Pressable>
-            ) : null}
+            ) : (
+              <ErrorCard messages={errors.messages} />
+            )}
           </ScrollView>
         </KeyboardAvoidingView>
       </MainComponent>

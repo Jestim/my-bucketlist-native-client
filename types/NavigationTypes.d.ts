@@ -1,36 +1,20 @@
 import { Route } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import IGoal from './GoalType';
+import IUser from './userType';
 
 export type BottomStackParamList = {
-  Home: undefined;
-  Goals: undefined;
-  Friends: undefined;
-  Search: undefined;
-  Profile: undefined;
+  HomeTab: undefined;
+  GoalsTab: undefined;
+  FriendsTab: undefined;
+  SearchTab: undefined;
+  ProfileTab: undefined;
 };
 
+// AUTH
 export type AuthStackParamList = {
   LogIn: undefined;
   SignUp: undefined;
-};
-
-export type GoalsStackParamList = {
-  MyBucketlist: undefined;
-  AddGoal: undefined;
-  GoalDetails: {
-    goalId: string;
-  };
-  EditGoal: {
-    goalId: string;
-  };
-};
-
-export type SearchStackParamList = {
-  SearchFriend: undefined;
-  UserDetails: {
-    userId: string;
-  };
 };
 
 // LOG IN
@@ -54,6 +38,17 @@ export type SignUpScreenProps = {
 };
 
 // GOALS
+export type GoalsStackParamList = {
+  MyBucketlist: undefined;
+  AddGoal: undefined;
+  GoalDetails: {
+    goalId: string;
+  };
+  EditGoal: {
+    goalId: string;
+  };
+};
+
 export type GoalsScreenNavigationProps = NativeStackNavigationProp<
   GoalsStackParamList,
   'AddGoal',
@@ -74,9 +69,16 @@ export type GoalDetailsScreenProps = {
 };
 
 // SEARCH
+export type SearchStackParamList = {
+  Search: undefined;
+  UserDetails: {
+    userId: string;
+  };
+};
+
 export type SearchScreenNavigationProps = NativeStackNavigationProp<
   SearchStackParamList,
-  'SearchFriend',
+  'Search',
   'UserDetails'
 >;
 
@@ -84,7 +86,34 @@ export type SearchScreenProps = {
   navigation: SearchScreenNavigationProps;
 };
 
+// USER DETAILS
+export type UserDetailsNavigationProps = NativeStackNavigationProp<
+  SearchStackParamList,
+  'Search',
+  'Friends',
+  'UserDetails'
+>;
+
 export type UserDetailsScreenProps = {
-  navigation: SearchScreenNavigationProps;
+  navigation: UserDetailsNavigationProps;
   route: Route;
+};
+
+// FRIENDS
+export type FriendStackParamList = {
+  Friends: undefined;
+  UserDetails: {
+    userId: string;
+  };
+};
+
+export type FriendsScreenNavigationProps = NativeStackNavigationProp<
+  FriendStackParamList,
+  'Friends',
+  'UserDetails'
+>;
+
+export type FriendsScreenProps = {
+  navigation: FriendsScreenNavigationProps;
+  friend: IUser;
 };

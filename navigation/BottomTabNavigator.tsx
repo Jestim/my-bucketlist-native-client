@@ -16,13 +16,14 @@ import ProfileScreen from '../screens/ProfileScreen';
 import colors from '../styles/colors';
 import GoalStackNavigator from './GoalsStackNavigator';
 import SearchStackNavigator from './SearchStackNavigator';
+import FriendStackNavigator from './FriendStackNavigator';
 
 const Tab = createBottomTabNavigator<BottomStackParamList>();
 
 export default function BottomTabNavigator() {
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="HomeTab"
       screenOptions={{
         tabBarShowLabel: false,
         headerShown: false,
@@ -31,7 +32,7 @@ export default function BottomTabNavigator() {
       }}
     >
       <Tab.Screen
-        name="Home"
+        name="HomeTab"
         component={HomeScreen}
         options={{
           tabBarIcon: () => (
@@ -40,7 +41,7 @@ export default function BottomTabNavigator() {
         }}
       />
       <Tab.Screen
-        name="Goals"
+        name="GoalsTab"
         component={GoalStackNavigator}
         options={{
           tabBarIcon: () => (
@@ -49,8 +50,8 @@ export default function BottomTabNavigator() {
         }}
       />
       <Tab.Screen
-        name="Friends"
-        component={FriendsScreen}
+        name="FriendsTab"
+        component={FriendStackNavigator}
         options={{
           tabBarIcon: () => (
             <FontAwesome name="heart" size={24} color={colors.light} />
@@ -58,7 +59,7 @@ export default function BottomTabNavigator() {
         }}
       />
       <Tab.Screen
-        name="Search"
+        name="SearchTab"
         component={SearchStackNavigator}
         options={{
           tabBarIcon: () => (
@@ -67,7 +68,7 @@ export default function BottomTabNavigator() {
         }}
       />
       <Tab.Screen
-        name="Profile"
+        name="ProfileTab"
         component={ProfileScreen}
         options={{
           tabBarIcon: () => (

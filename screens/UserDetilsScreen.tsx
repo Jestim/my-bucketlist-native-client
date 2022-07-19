@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import { View, Text, StyleSheet } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { useEffect, useContext, useState } from 'react';
@@ -35,7 +34,7 @@ function UserDetailsScreen(props: UserDetailsScreenProps) {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    const fetchGoalDetails = async () => {
+    const fetchUserDetails = async () => {
       try {
         const response = await fetch(`${host}/api/users/${userId}`, {
           method: 'GET',
@@ -45,29 +44,27 @@ function UserDetailsScreen(props: UserDetailsScreenProps) {
             'Content-Type': 'application/json',
           },
         });
+        console.log(response.status);
 
+        const data = await response.json();
         if (response.ok) {
-          const data = await response.json();
           setUserData(data);
         } else {
-          console.log(response.status);
+          throw new Error(data.message);
         }
-      } catch (error) {
-        console.log(error);
+      } catch (error: any) {
+        console.log(error.message);
+        setErrors({
+          isShown: true,
+          messages: [error.message],
+        });
       }
     };
 
     if (isFocused) {
-      fetchGoalDetails().catch((err: any) => console.log(err));
+      fetchUserDetails().catch((err: any) => console.log(err));
     }
   }, [isFocused]);
-
-  if (!userData) {
-    setErrors({
-      isShown: true,
-      messages: ['Could not find user'],
-    });
-  }
 
   return (
     <>
@@ -75,22 +72,24 @@ function UserDetailsScreen(props: UserDetailsScreenProps) {
       <MainComponent>
         {errors.isShown ? (
           <ErrorCard messages={errors.messages} />
-        ) : userData ? (
-          <View style={styles.userContainer}>
-            <View style={styles.headerTextContainer}>
-              <Text style={styles.headerText}>{userData.username}</Text>
+        ) : (
+          <>
+            <View style={styles.userContainer}>
+              <View style={styles.headerTextContainer}>
+                <Text style={styles.headerText}>{userData.username}</Text>
+              </View>
+              <View style={styles.userDetailsContainer}>
+                <Text style={styles.detailsText}>{userData.name}</Text>
+                <Text style={styles.detailsText}>{userData.age}</Text>
+              </View>
             </View>
-            <View style={styles.userDetailsContainer}>
-              <Text style={styles.detailsText}>{userData.name}</Text>
-              <Text style={styles.detailsText}>{userData.age}</Text>
-            </View>
-          </View>
-        ) : null}
+            <AddFriendButton
+              friendData={userData}
+              currentUserState={currentUserState}
+            />
+          </>
+        )}
         <GoBackButton navigation={navigation} />
-        <AddFriendButton
-          friendData={userData}
-          currentUserState={currentUserState}
-        />
       </MainComponent>
     </>
   );
