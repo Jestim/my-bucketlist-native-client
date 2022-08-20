@@ -6,7 +6,7 @@ import HeaderComponent from '../components/HeaderComponent';
 import StandardTextComponent from '../components/StandardTextComponent';
 import CurrentUserDetailsContext from '../context/UserContext';
 import { CurrentUserDetailsContextType } from '../types/ContextTypes';
-import IUser from '../types/userType';
+import IUser, { IFriendRequest } from '../types/userType';
 import host from '../helpers/host';
 import ErrorsType from '../types/ErrorsType';
 import { initialErrorState } from '../helpers/initialValues';
@@ -15,20 +15,19 @@ import { FriendsScreenProps } from '../types/NavigationTypes';
 import ErrorCard from '../components/ErrorCard';
 
 function FriendsScreen({ navigation }: FriendsScreenProps) {
-  console.log('FriendsScreen rendering');
-
   const { currentUserState } = useContext(
     CurrentUserDetailsContext,
   ) as CurrentUserDetailsContextType;
 
-  const [friends, setFriends] = useState<IUser[] | null>(null);
+  const [friends, setFriends] = useState<IUser[]>();
+  const [friendRequests, setFriendsRequests] = useState<IFriendRequest[]>();
   const [errors, setErrors] = useState<ErrorsType>(initialErrorState);
 
   const isFocused = useIsFocused();
 
   useEffect(() => {
     const fetchFriends = async () => {
-      const response = await fetch(`${host}/api/users/friends`, {
+      const response = await fetch(`${host}/api/friends`, {
         method: 'GET',
         headers: {
           Accept: 'application/json',
@@ -39,8 +38,11 @@ function FriendsScreen({ navigation }: FriendsScreenProps) {
 
       const data = await response.json();
 
+      console.log(data);
+
       if (response.ok) {
         setFriends(data.friends);
+        setFriendsRequests(data.friendRequests);
       } else {
         throw new Error(`${response.status}: ${data.message}`);
       }

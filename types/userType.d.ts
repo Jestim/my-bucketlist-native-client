@@ -1,5 +1,6 @@
 export interface IFriendRequest {
-  userId: Types.ObjectId;
+  requester: Types.ObjectId;
+  recipient: Types.ObjectId;
   status: 'pending' | 'rejected';
 }
 

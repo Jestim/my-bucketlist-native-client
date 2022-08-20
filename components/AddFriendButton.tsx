@@ -27,6 +27,8 @@ function AddFriendButton({ friendData, currentUserState }: Props) {
     }
 
     try {
+      console.log(friendData.id);
+
       const response = await fetch(`${host}/api/users/friends`, {
         method: 'POST',
         headers: {
@@ -34,7 +36,7 @@ function AddFriendButton({ friendData, currentUserState }: Props) {
           Authorization: `Bearer ${currentUserState.jwtToken}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(friendUserData.id),
+        body: JSON.stringify({ friendid: friendUserData.id }),
       });
 
       if (response.ok) {
@@ -60,14 +62,15 @@ function AddFriendButton({ friendData, currentUserState }: Props) {
 
   // show no button if the current user is the same as the displayed user
   // or if the current user and displayed are user already friends
-  if (
-    friendUserData?.id === currentUserState.userId ||
-    friendUserData?.friends.includes(currentUserState.userId)
-  ) {
-    return null;
-  }
 
   if (friendUserData) {
+    if (
+      friendUserData.id === currentUserState.userId ||
+      friendUserData.friends.includes(currentUserState.userId)
+    ) {
+      return null;
+    }
+
     for (let i = 0; i < friendUserData?.friendRequests.length; i++) {
       // if request is already sent and pending show a button to cancel friend request
       if (

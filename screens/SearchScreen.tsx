@@ -29,7 +29,7 @@ function SearchScreen({ navigation }: SearchScreenProps) {
   ) as CurrentUserDetailsContextType;
 
   const [username, setUsername] = useState<string>('');
-  const [friend, setFriend] = useState<IUser | null>(null);
+  const [friend, setFriend] = useState<IUser>();
   const [errors, setErrors] = useState<ErrorsType>(initialErrorState);
 
   const getFriendDetails = async () => {
